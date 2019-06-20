@@ -1,0 +1,9 @@
+note over browser
+a) page loads 
+b) user posts comment
+end note
+
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note
+server-->browser: response with HTTP status code 302 (redirect)
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
+server-->browser: HTML-code with new note, notes, main.css, main.js and data.json
