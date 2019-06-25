@@ -1,39 +1,30 @@
 import React, {useState } from 'react';
 import ReactDOM from 'react-dom';
 
-const App = (props) => {
-    const [ counter, setCounter ] = useState(0) // fn call adds state to the component, that gets initialized with the value of zero.
-    // counter is the state, starting at zero
-    // setCountner is used to modify state - here it's the count
+const Display = props => <div>{props.value}</div>
 
-    const setToValue = (value) => setCounter(value)
+const Button = (props) => (
+  <button onClick={props.handleClick}>
+    {props.text}
+  </button>
+)
+
+const App = (props) => {
+  const [value, setValue] = useState(10)
+
+  const setToValue = (newValue) => {
+    setValue(newValue)
+  }
 
   return (
     <div>
-      <Display counter={counter}/>
-      <Button
-            onClick={() => setToValue(counter + 1)}
-            text='plus'
-        />
-       <Button
-            onClick={() => setToValue(counter - 1)}
-            text='minus'
-       />
-       <Button 
-            onClick={() => setToValue(0)}
-            text='reset'
-       />
+      <Display value={value}/>
+      <Button handleClick={() => setToValue(1000)} text="thousand"/>
+      <Button handleClick={() => setToValue(0)} text="reset"/>
+      <Button handleClick={() => setToValue(value + 1)} text="increment by 1"/>
     </div>
   )
 }
-
-const Display = ({ counter }) => <div>{counter}</div>
-
-const Button = ({onClick, text}) => (
-    <button onClick={onClick}>
-        {text}
-    </button>
-)
 
 ReactDOM.render(<App />, document.getElementById('root'))
 
