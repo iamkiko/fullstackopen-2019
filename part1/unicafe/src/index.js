@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom'
 
 const Title = () => <h1>give feedback</h1>
 
-const Button = (props) => (
-    <button onClick={props.handleClick}>
-      {props.text}
+const Button = ({text, handleClick}) => (
+    <button onClick={handleClick}>
+      {text}
     </button>
   )
 
