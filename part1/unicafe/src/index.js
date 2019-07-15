@@ -60,13 +60,19 @@ const App = (props) => {
     setGood(newValue)
   }
 
+  const addGoodResult = () => setGoodResult(good + 1);
+
   const setNeutralResult = (newValue) => {
     setNeutral(newValue)
   }
 
+  const addNeutralResult = () => setNeutralResult(neutral + 1);
+
   const setBadResult = (newValue) => {
     setBad(newValue)
   }
+
+  const addBadResult = () => setBadResult(bad + 1);
 
   // object to store results
   const results = {
@@ -78,9 +84,9 @@ const App = (props) => {
   return (
     <div>
         <Title/>
-        <Button handleClick={() => setGoodResult(good + 1)} text="good" counter={good} /> 
-        <Button handleClick={() => setNeutralResult(neutral + 1)} text="neutral" counter={neutral}/> 
-        <Button handleClick={() => setBadResult(bad + 1)} text="bad" counter={bad}/> 
+        <Button handleClick={addGoodResult} text="good" counter={good} /> 
+        <Button handleClick={addNeutralResult} text="neutral" counter={neutral}/> 
+        <Button handleClick={addBadResult} text="bad" counter={bad}/> 
         <Statistics data={results}/>
     </div>
   )
