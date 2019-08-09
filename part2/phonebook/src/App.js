@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
-import Notification from './components/Notification'
+import SuccessNotification from './components/SuccessNotification'
+import ErrorNotification from './components/ErrorNotification'
 import PersonForm from './components/PersonForm'
 import personService from './services/persons'
 import './index.css' 
@@ -11,7 +12,8 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber] = useState('')
   const [ filter, setFilter] = useState('')
-  const [ feedbackMessage, setFeedbackMessage] = useState(null)
+  const [ successMessage, setSuccessMessage] = useState(null)
+  const [ errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -40,20 +42,19 @@ const App = () => {
       .update(dude.id, personObject)
       .then(returnedPerson => {
         setPersons(persons.map(p => p.id === dude.id ? returnedPerson : p))
-        setFeedbackMessage(
+        setSuccessMessage(
           `Updated ${newName}`
         )
         setTimeout(() => {
-          setFeedbackMessage(null)
+          setSuccessMessage(null)
         }, 5000)
-        console.log(persons.name)
       })
       .catch(error => {
-        setFeedbackMessage(
+        setErrorMessage(
           `Information of ${newName} was already removed from the server`
         )
         setTimeout(() => {
-          setFeedbackMessage(null)
+          setErrorMessage(null)
         }, 5000)
       })
     } else {
@@ -61,7 +62,7 @@ const App = () => {
         .create(personObject)
         .then(newPerson => {
         setPersons(persons.concat(newPerson))
-        setFeedbackMessage(`Added ${newName}`)
+        setSuccessMessage(`Added ${newName}`)
         setNewName('')
         setNewNumber('')
     })
@@ -74,13 +75,13 @@ const deletePerson = (id, name) => {
     .removePerson(id)
     .then(() =>  {
       setPersons(persons.filter(p => p.id !== id) )
+      console.log(newName)
+      setSuccessMessage(`Information of ${name} has been removed from the server`)
     })
     .catch(error => {
-      setFeedbackMessage(
-        `Information of ${newName} has been removed from the server`
-      )
+      setErrorMessage(error.response.data.error)
       setTimeout(() => {
-        setFeedbackMessage(null)
+        setErrorMessage(null)
       }, 5000)
       })
     }
@@ -101,7 +102,8 @@ const deletePerson = (id, name) => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={feedbackMessage}/>
+      <SuccessNotification message={successMessage}/>
+      <ErrorNotification message={errorMessage}/>
         <Filter 
           value={filter} 
           updateFilter={handleFilterChange} 
