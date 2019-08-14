@@ -1,11 +1,14 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 const bodyParser = require('body-parser')
-const morgan = require('morgan')
 
-app.use(morgan('tiny'))
 app.use(bodyParser.json())
-// app.use(bodyParser.urlencoded({ extended: false }));
+
+morgan.token('data', (req) => JSON.stringify(req.body))
+
+app.use(morgan(':method :url :status  :res[content-length] - :response-time ms :data '))
+
     let persons = [
       {
         name: "Bill Gates",
@@ -110,6 +113,7 @@ app.use(bodyParser.json())
           persons = persons.concat(person)
 
           response.json(person) //response.json(body)?
+    
       })
 
 const PORT = 3001
