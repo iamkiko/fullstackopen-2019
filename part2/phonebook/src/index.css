@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .error {
   color: red;
   background: lightgray;
@@ -17,3 +18,25 @@
   padding: 10px;
   margin-bottom: 10px;
 }
+||||||| merged common ancestors
+=======
+.error {
+  color: red;
+  background: lightgray;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.success {
+  color: green;
+  background: lightgray;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+>>>>>>> 4485d87913d18963e60650c66c8ab6f2831fa7f0
