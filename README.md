@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-# fullstackopen-2019
-<<<<<<< HEAD
-||||||| merged common ancestors
-=======
 # fullstackopen-2019
 
 University of Helsinki Full-Stack MOOC - https://fullstackopen.com/en/about
