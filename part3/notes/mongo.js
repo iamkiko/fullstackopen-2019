@@ -7,7 +7,7 @@ if (process.argv.length<3) {
 
 const password = process.argv[2]
 
-const url = `mongodb+srv://iamkiko:${encodeURIComponent('thisisftw15.')}@cluster0-vdvmu.mongodb.net/note-app?retryWrites=true&w=majority`
+const url = `mongodb+srv://iamkiko:${encodeURIComponent(${password})}@cluster0-vdvmu.mongodb.net/note-app?retryWrites=true&w=majority`
 
 mongoose.connect(url, { useNewUrlParser: true })
 
