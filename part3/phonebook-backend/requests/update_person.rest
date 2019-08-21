@@ -1,4 +1,4 @@
-PUT http://localhost:3001/api/person
+PUT http://localhost:3001/api/persons/5d5d223a2c3b162bfcade1e1
 Content-Type: application/json
 
 {

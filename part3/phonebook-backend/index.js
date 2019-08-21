@@ -78,7 +78,7 @@ app.get('/api/persons', (request, response) => {
 
 //GET INFO
 app.get('/info', (request, response) => {
-  const phonebookInfo = `Phonebook has info for ${persons.length} people 
+  const phonebookInfo = `Phonebook has info for ${request.body.length} people 
 
   ${new Date()}`
   // const date = new Date()
@@ -98,14 +98,23 @@ app.get('/api/persons/:id', (request, response, next) => {
   .catch(error => next(error))
 })
 
+//UPDATING
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+
+  const person = {
+    name: body.name,
+    number: " - " + body.number
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person)
+  .then(updatedPerson => {
+    response.json(updatedPerson.toJSON())
+  })
+  .catch(error => next(error))
+})
+
 //DELETE
-// app.delete('/api/persons/:id', (request, response) => {
-//   const id = Number(request.params.id)
-//   persons = persons.filter(persons => persons.id !== id)
-
-//   response.status(204).end()
-// })
-
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
     .then(result => {
