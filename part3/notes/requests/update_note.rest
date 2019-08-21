@@ -1,0 +1,7 @@
+PUT http://localhost:3001/api/notes/5d5d1f29cc0e96184836ca64
+Content-Type: application/json
+
+{
+    "content": "I am learning code daily",
+    "important": true
+}
