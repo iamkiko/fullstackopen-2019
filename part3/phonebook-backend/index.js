@@ -44,6 +44,31 @@ app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
 })
 
+//POST ->  ADDING
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+  if(!body.name || !body.number || undefined) { // if empty
+      return response.status(400).json({
+          error: 'please include name and number'
+      })
+  }   
+  else if(persons.map(person => person.name).includes(body.name)) { //if duplicate name
+    return response.status(400).json({
+        error: 'name must be unique'
+    })
+  }
+
+  const person = new Person({
+      name: body.name,
+      number: " - " + body.number,
+  })
+
+  person.save().then(savedPerson => {
+    response.json(savedPerson.toJSON())
+  })
+})
+
+
 //GET ALL PERSONS
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(people => {
@@ -51,6 +76,7 @@ app.get('/api/persons', (request, response) => {
   })
 })
 
+//GET INFO
 app.get('/info', (request, response) => {
   const phonebookInfo = `Phonebook has info for ${persons.length} people 
 
@@ -60,58 +86,45 @@ app.get('/info', (request, response) => {
 })
 
 //GET SPECIFIC PERSON
-app.get('/api/persons/:id', (request, response) => {
-  Person.findById(request.params.id).then(person => {
-    response.json(person.toJSON())
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+  .then(person => {
+    if(person) {
+      response.json(person.toJSON())
+    } else {
+      response.status(404).end()
+    }
   })
+  .catch(error => next(error))
 })
 
 //DELETE
-app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  persons = persons.filter(persons => persons.id !== id)
+// app.delete('/api/persons/:id', (request, response) => {
+//   const id = Number(request.params.id)
+//   persons = persons.filter(persons => persons.id !== id)
 
-  response.status(204).end()
+//   response.status(204).end()
+// })
+
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
-// //GENERATING ID function
-// const generateId = () => {
-//   const newId = persons.length > 0
-//     ? Math.floor(Math.random() * 1000 + 1)
-//     : 0
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
 
-//     return newId
-// }
+  if (error.name === 'CastError' && error.kind === 'ObjectId') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
 
-//POST ->  ADDING
-app.post('/api/persons', (request, response) => {
-    const body = request.body
-    // console.log(body.name)
-    // const exists = body.includes(body.name)
-    if(!body.name || !body.number || undefined) { // if empty
-        return response.status(400).json({
-            error: 'please include name and number'
-        })
-    }   
-    else if(persons.map(person => person.name).includes(body.name)) { //if duplicate name
-      return response.status(400).json({
-          error: 'name must be unique'
-      })
-    }
+  next(error)
+}
 
-    const person = new Person({
-        name: body.name,
-        number: body.number,
-    })
-
-    person.save().then(savedPerson => {
-      response.json(savedPerson.toJSON())
-    })
-    // persons = persons.concat(person)
-
-    // response.json(person) 
-
-})
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT), () => {
