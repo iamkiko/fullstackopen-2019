@@ -2,6 +2,6 @@ POST https://shielded-coast-83029.herokuapp.com/api/persons
 Content-Type: application/json
 
 {
-    "name": "hello",
-    "number": "021 556 9923"
+    "name": "Error",
+    "number": "404"
 }
