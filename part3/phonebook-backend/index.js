@@ -60,7 +60,7 @@ app.post('/api/persons', (request, response) => {
 
   const person = new Person({
       name: body.name,
-      number: " - " + body.number,
+      number: body.number,
   })
 
   person.save().then(savedPerson => {
