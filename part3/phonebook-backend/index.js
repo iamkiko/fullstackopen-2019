@@ -78,11 +78,15 @@ app.get('/api/persons', (request, response) => {
 
 //GET INFO
 app.get('/info', (request, response) => {
-  const phonebookInfo = `Phonebook has info for ${request.body.length} people 
-
-  ${new Date()}`
-  // const date = new Date()
-  response.send(phonebookInfo)
+  Person.countDocuments({}, (error, count) => {
+    if (error) {
+      response.send(error)
+    } else {
+      const phonebookInfo = `<p></p>Phonebook has info for ${count} people </p>
+                            <p> ${new Date()}</p>`
+      response.send(phonebookInfo)
+    }
+  })
 })
 
 //GET SPECIFIC PERSON
@@ -122,6 +126,12 @@ app.delete('/api/persons/:id', (request, response, next) => {
     })
     .catch(error => next(error))
 })
+
+const unknownEndpoint = (request, response) => {
+	response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
