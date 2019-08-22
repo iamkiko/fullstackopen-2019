@@ -30,18 +30,27 @@ const App = () => {
     //adding a person
   const addPerson = (event) => {
     event.preventDefault()
-    const personObject = {
+    const updatedPersonObject = {
       name: newName,
       number: newNumber,
-      id: persons[persons.length - 1].id + 1
+      //id: persons[persons.length - 1].id + 1
     }
-    if (persons.map(person => person.name).includes(newName)){ //updating 
-      const dude = persons.find(p => p.name === personObject.name)
+    const indexSameNamePerson = persons.map(person => person.name).indexOf(newName) //checking if person exists in db
+    if (indexSameNamePerson > -1) { 
+      const personInArray = persons[indexSameNamePerson]; //finding position
       window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)
-      personService
-      .update(dude.id, personObject)
+      personService //updating 
+      .update(personInArray.id, updatedPersonObject)
       .then(returnedPerson => {
-        setPersons(persons.map(p => p.id === dude.id ? returnedPerson : p))
+        setPersons(persons
+          .map(p => p.id === personInArray.id 
+            ? {
+              ...updatedPersonObject,
+              id: returnedPerson.id,
+            } 
+            : p
+          )
+        )
         setSuccessMessage(
           `Updated ${newName}`
         )
@@ -59,7 +68,7 @@ const App = () => {
       })
     } else {
       personService
-        .create(personObject)
+        .create(updatedPersonObject)
         .then(newPerson => {
         setPersons(persons.concat(newPerson))
         setSuccessMessage(`Added ${newName}`)

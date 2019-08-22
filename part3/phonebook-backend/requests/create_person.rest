@@ -1,7 +1,7 @@
-POST https://shielded-coast-83029.herokuapp.com/api/persons
+POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "Error",
-    "number": "404"
+    "name": "John Wick",
+    "number": "848 555 7321"
 }
