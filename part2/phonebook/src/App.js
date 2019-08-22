@@ -35,11 +35,11 @@ const App = () => {
       number: newNumber,
       //id: persons[persons.length - 1].id + 1
     }
-    const indexSameNamePerson = persons.map(person => person.name).indexOf(newName)
-    if (indexSameNamePerson > -1) { //updating 
-      const personInArray = persons[indexSameNamePerson];
+    const indexSameNamePerson = persons.map(person => person.name).indexOf(newName) //checking if person exists in db
+    if (indexSameNamePerson > -1) { 
+      const personInArray = persons[indexSameNamePerson]; //finding position
       window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)
-      personService
+      personService //updating 
       .update(personInArray.id, updatedPersonObject)
       .then(returnedPerson => {
         setPersons(persons
