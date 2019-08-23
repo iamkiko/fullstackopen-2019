@@ -1,4 +1,6 @@
-require('dotenv').config()
+// if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+// }
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
@@ -44,14 +46,8 @@ let notes = [
       res.send('<h1>Hello World!</h1>')
   })
 
-  app.post('/api/notes', (request, response) => {
+  app.post('/api/notes', (request, response, next) => {
     const body = request.body
-   
-    if(body.content === undefined) { //no content
-        return response.status(400).json({
-            error: 'content missing'
-        })
-    }
 
     const note = new Note ({ //creating notes
         content: body.content,
@@ -59,9 +55,12 @@ let notes = [
         date: new Date(),
     })
 
-    note.save().then(savedNote => {
-      response.json(savedNote.toJSON()) //data sent back is formatted with toJSON()
+    note.save()
+    .then(savedNote => savedNote.toJSON()) //data sent back is formatted with toJSON()
+    .then(savedAndFormattedNote => {
+      response.json(savedAndFormattedNote)
     })
+    .catch(error => next(error))
   })
 
   app.get('/api/notes', (request, response) => {
@@ -116,8 +115,9 @@ let notes = [
   
     if (error.name === 'CastError' && error.kind === 'ObjectId') {
       return response.status(400).send({ error: 'malformatted id' })
-    } 
-  
+    } else if (error.name === 'ValidationError') {
+      return response.status(400).json({ error: error.message })
+    }
     next(error)
   }
 
