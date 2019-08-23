@@ -15,9 +15,16 @@ mongoose.connect(url, { useNewUrlParser: true })
   })
 
 const noteSchema = new mongoose.Schema({
-  content: String,
-  date: Date,
-  important: Boolean,
+  content: {
+    type: String,
+    minlength: 5,
+    required: true
+  },
+  date: {
+    type: Date,
+    required: true
+  },
+  important: Boolean
 })
 
 noteSchema.set('toJSON', {
