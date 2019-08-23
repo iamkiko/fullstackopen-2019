@@ -45,27 +45,29 @@ app.get('/', (request, response) => {
 })
 
 //POST ->  ADDING
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
-  if(!body.name || !body.number || undefined) { // if empty
-      return response.status(400).json({
-          error: 'please include name and number'
-      })
-  }   
-  else if(persons.map(person => person.name).includes(body.name)) { //if duplicate name
-    return response.status(400).json({
-        error: 'name must be unique'
-    })
-  }
+  // if(!body.name || !body.number || undefined) { // if empty
+  //     return response.status(400).json({
+  //         error: 'please include name and number'
+  //     })
+  // }   
+  // else if(persons.map(person => person.name).includes(body.name)) { //if duplicate name
+  //   return response.status(400).json({
+  //       error: 'name must be unique'
+  //   })
+  // }
 
   const person = new Person({
       name: body.name,
       number: body.number,
   })
 
-  person.save().then(savedPerson => {
-    response.json(savedPerson.toJSON())
+  person.save().then(savedPerson => savedPerson.toJSON())
+  .then(savedAndFormattedPerson => {
+    response.json(savedAndFormattedPerson)
   })
+  .catch(error => next(error))
 })
 
 
@@ -108,7 +110,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 
   const person = {
     name: body.name,
-    number: " - " + body.number
+    number: body.number
   }
 
   Person.findByIdAndUpdate(request.params.id, person)
@@ -138,8 +140,9 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError' && error.kind === 'ObjectId') {
     return response.status(400).send({ error: 'malformatted id' })
-  } 
-
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
   next(error)
 }
 
