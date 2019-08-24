@@ -33,7 +33,6 @@ mongoose.connect(url, {
       }
   })
 
-  // const validate = { runValidators: true }
   personSchema.plugin(uniqueValidator)
 
   personSchema.set('toJSON', {

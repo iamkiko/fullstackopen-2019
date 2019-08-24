@@ -22,6 +22,29 @@ const App = () => {
         setPersons(initialPersons)
     })
   }, [])
+
+  const errorContent = (error, standardStatus) => {
+    const message = error.response.data ? `Error: ${error.response.data.error}` : standardStatus
+    setErrorMessage(message)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }
+
+  const successContent = (message) => {
+    setSuccessMessage(message);
+    setTimeout(() => {
+      setSuccessMessage(null);
+    }, 5000)
+  }
+
+  // const setSuccess = (message) => {
+  //   setSuccessMessage(message);
+  //   setTimeout(() => {
+  //     setSuccessMessage(null);
+  //   }, notificationTimeout)
+  // };
+
   
   //filter/search function
   const personsToShow = persons.filter(person => 
@@ -36,7 +59,7 @@ const App = () => {
       //id: persons[persons.length - 1].id + 1
     }
     const indexSameNamePerson = persons.map(person => person.name).indexOf(newName) //checking if person exists in db
-    if (indexSameNamePerson > -1) { 
+    if (indexSameNamePerson > -1) { //if already exists
       const personInArray = persons[indexSameNamePerson]; //finding position
       window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)
       personService //updating 
@@ -51,29 +74,26 @@ const App = () => {
             : p
           )
         )
-        setSuccessMessage(
-          `Updated ${newName}`
-        )
-        setTimeout(() => {
-          setSuccessMessage(null)
-        }, 5000)
+        successContent(`Updated ${newName}`)
       })
       .catch(error => {
-        setErrorMessage(
-          `Information of ${newName} was already removed from the server`
-        )
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
+        errorContent(error, `Error: Information of ${newName} was already removed from the server `)
+        // personService.getAll().then(data => setPersons(data))
       })
-    } else {
+    } else { //if added successfully
       personService
         .create(updatedPersonObject)
         .then(newPerson => {
         setPersons(persons.concat(newPerson))
-        setSuccessMessage(`Added ${newName}`)
+        successContent(`Added ${newName}`)
         setNewName('')
         setNewNumber('')
+    })
+    .catch(error => {
+      errorContent(error, error.message)
+      // const errorState = error.response.data.error
+      console.log(error.response.data)
+      // personService.getAll().then(data => setPersons(data))
     })
   }
 }
@@ -88,10 +108,8 @@ const deletePerson = (id, name) => {
       setSuccessMessage(`Information of ${name} has been removed from the server`)
     })
     .catch(error => {
-      setErrorMessage(error.response.data.error)
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      errorContent(error, `Have you already deleted ${name}?`)
+      // personService.getAll().then(data => setPersons(data))
       })
     }
 }
