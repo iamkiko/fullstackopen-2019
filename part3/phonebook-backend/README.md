@@ -1,3 +1,3 @@
-Frontend: https://shielded-coast-83029.herokuapp.com 
+Frontend: https://morning-earth-29726.herokuapp.com/
 
-Backend: https://shielded-coast-83029.herokuapp.com/api/persons
+Backend: https://morning-earth-29726.herokuapp.com/api/persons
