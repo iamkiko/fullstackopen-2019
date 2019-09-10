@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "watch": "nodemon index.js",
+    "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "rm -rf build && cd /c/Users/Christos/Desktop/fullstackopen-2019/part2/notes/ && npm run build --prod && cp -r build /c/Users/Christos/Desktop/fullstackopen-2019/part3/notes/",
     "deploy": "git push heroku master",
@@ -21,6 +22,7 @@
     "mongoose": "^5.6.9"
   },
   "devDependencies": {
+    "eslint": "^6.2.2",
     "nodemon": "^1.19.1"
   },
   "engines": {
