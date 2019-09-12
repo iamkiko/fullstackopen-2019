@@ -14,23 +14,28 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
-//HTTP GET TEST 4.8
-test('blogs are returned as json', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+
+describe('returning the blogs' () => {
+  //HTTP GET TEST 4.8
+  test('blogs are returned as json', async () => {
+    await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+  
+  //ID TEST 4,9*
+  test('blogs are returned with id, not _id', async () => {
+      const response = await api.get('/api/blogs/')
+      response.body.forEach(blog => expect(blog.id).toBeDefined())
+      console.table(response.body)
+  })
 })
 
-//ID TEST 4,9*
-test('blogs are returned with id, not _id', async () => {
-    const response = await api.get('/api/blogs/')
-    response.body.forEach(blog => expect(blog.id).toBeDefined())
-    console.table(response.body)
-})
 
+describe('adding blog posts', () => {
 //HTTP POST TEST 4.10
-test('creating a new blog post', async () => {
+  test('creating a new blog post', async () => {
     const newPost = {
         title: "Hello World",
         author: "Martin Fowler",
@@ -44,16 +49,15 @@ test('creating a new blog post', async () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-    // const response = await api.get('/api/blogs/')
     const blogAtEnd = await helper.blogsInDb()
     expect(blogAtEnd.length).toBe(helper.initialBlog.length + 1)
 
     const contents = blogAtEnd.map(post => post.title)
     expect(contents).toContain('Hello World')
-})
+  })
 
-// Checking if no likes param returns 0 - 4.11
-test('default likes to 0 if missing', async () => {
+  // Checking if no likes param returns 0 - 4.11
+  test('default likes to 0 if missing from new blogpost', async () => {
     const newPost = {
         title: "Where are my likes?",
         author: "Unlikeable Man",
@@ -69,10 +73,10 @@ test('default likes to 0 if missing', async () => {
     const blogAtEnd = await helper.blogsInDb()
     const blogLikes = blogAtEnd.map(blog => blog.likes)
     expect(blogLikes[blogLikes.length - 1]).toBe(0)
-})
+  })
 
-//checking if a blogpost without title or url fails to be added - 4.12
-test('blogpost without url or title is not added', async () => {
+  //checking if a blogpost without title or url fails to be added - 4.12
+  test('adding blogpost without url or title returns 400', async () => {
   const newPost = {
     author: "Ninja",
     likes: 3
@@ -87,7 +91,9 @@ test('blogpost without url or title is not added', async () => {
   const blogAtEnd = await helper.blogsInDb()
 
   expect(blogAtEnd.length).toBe(helper.initialBlog.length)
+  })
 })
+
 
 
 afterAll(() => {
