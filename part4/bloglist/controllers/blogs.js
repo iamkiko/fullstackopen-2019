@@ -6,7 +6,6 @@ blogsRouter.get('/', async (request, response) => { // / = /api/blogs
     response.json(blogs.map(blog => blog.toJSON()))
 })
 
-
 blogsRouter.get('/:id', async (request, response, next) => {
     try{
       const blog = await Blog.findById(request.params.id)
@@ -19,7 +18,6 @@ blogsRouter.get('/:id', async (request, response, next) => {
       next(exception)
     }
   })
-
 
 blogsRouter.post('/', async (request, response, next) => {
     const body = request.body

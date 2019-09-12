@@ -10,13 +10,14 @@ beforeEach(async () => {
   await Blog.deleteMany({})
   // await Promise.all(helper.blogs.map(blog => new Blog(blog).save()));
   
-  // const blogObjects = helper.initialBlog.map(blog => new Blog(blog))
-  // const promiseArray = blogObjects.map(blog => blog.save())
-  // await Promise.all(promiseArray)
-  for (let blog of helper.initialBlog) {
-    let blogObject = new Blog(blog)
-    await blogObject.save()
-  }
+  const blogObjects = helper.initialBlog.map(blog => new Blog(blog))
+  const promiseArray = blogObjects.map(blog => blog.save())
+  await Promise.all(promiseArray)
+
+  // for (let blog of helper.initialBlog) {
+  //   let blogObject = new Blog(blog)
+  //   await blogObject.save()
+  // }
 })
 
 
@@ -108,9 +109,7 @@ describe('deleting a blogpost', () => {
 
     await api
     .delete(`/api/blogs/${postToDelete.id}`)
-    .expect(404)
-
-    console.log('after delete', blogAtStart)
+    .expect(204)
 
     const blogAtEnd = await helper.blogsInDb()
 
