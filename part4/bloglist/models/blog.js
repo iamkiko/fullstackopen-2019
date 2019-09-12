@@ -1,11 +1,6 @@
 const mongoose = require('mongoose')
 
-// url and mongoose.connect not required as per .env
-// const url =
-//   `mongodb+srv://iamkiko:${password}@cluster0-ostce.mongodb.net/blog-list?retryWrites=true`
-// mongoose.connect(url, { useNewUrlParser: true })
-
-const blogSchema = mongoose.Schema({
+const blogSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true

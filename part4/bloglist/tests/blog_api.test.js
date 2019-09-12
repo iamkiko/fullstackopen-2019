@@ -9,13 +9,18 @@ const Blog = require('../models/blog')
 beforeEach(async () => {
   await Blog.deleteMany({})
   // await Promise.all(helper.blogs.map(blog => new Blog(blog).save()));
-  const blogObjects = helper.initialBlog.map(blog => new Blog(blog))
-  const promiseArray = blogObjects.map(blog => blog.save())
-  await Promise.all(promiseArray)
+  
+  // const blogObjects = helper.initialBlog.map(blog => new Blog(blog))
+  // const promiseArray = blogObjects.map(blog => blog.save())
+  // await Promise.all(promiseArray)
+  for (let blog of helper.initialBlog) {
+    let blogObject = new Blog(blog)
+    await blogObject.save()
+  }
 })
 
 
-describe('returning the blogs' () => {
+describe('returning the blogs', () => {
   //HTTP GET TEST 4.8
   test('blogs are returned as json', async () => {
     await api
@@ -91,6 +96,28 @@ describe('adding blog posts', () => {
   const blogAtEnd = await helper.blogsInDb()
 
   expect(blogAtEnd.length).toBe(helper.initialBlog.length)
+  })
+})
+
+describe('deleting a blogpost', () => {
+  test('succeeds with 204 if it finds it', async () => {
+    const blogAtStart = await helper.blogsInDb()
+    const postToDelete = blogAtStart[0]
+
+    console.log('blogid:', postToDelete.id)
+
+    await api
+    .delete(`/api/blogs/${postToDelete.id}`)
+    .expect(404)
+
+    console.log('after delete', blogAtStart)
+
+    const blogAtEnd = await helper.blogsInDb()
+
+    expect(blogAtEnd.length).toBe(helper.initialBlog.length - 1)
+
+    const contents = blogAtEnd.map(post => post.title)
+    expect(contents).not.toContain(postToDelete.title)
   })
 })
 
