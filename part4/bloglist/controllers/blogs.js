@@ -34,6 +34,7 @@ blogsRouter.post('/', async (request, response, next) => {
     } catch (exception) {
         next(exception)
     }
+  })
 
 blogsRouter.delete('/:id', async (request, response, next) => {
     try {
@@ -43,6 +44,5 @@ blogsRouter.delete('/:id', async (request, response, next) => {
         next(exception)
     }
     })
-})
 
 module.exports = blogsRouter
