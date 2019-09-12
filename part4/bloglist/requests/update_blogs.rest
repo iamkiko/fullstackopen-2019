@@ -2,8 +2,8 @@ PUT http://localhost:3003/api/blogs/5d7a443245e63211dc4b9e1f
 Content-Type: application/json
 
  {
-  "title": "i think i got this right",
-  "author": "buddha",
+  "title": "final test",
+  "author": "updated finally",
   "url": "christos.co.za",
   "likes": 24
 }
