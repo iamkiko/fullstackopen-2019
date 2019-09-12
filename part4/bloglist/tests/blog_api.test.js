@@ -6,12 +6,6 @@ const api = supertest(app)
 
 const Blog = require('../models/blog')
 
-
-// beforeEach(async () => {
-//   await Blog.deleteMany({});
-//   await Promise.all(helper.blogs.map(blog => new Blog(blog).save()));
-// });
-
 beforeEach(async () => {
   await Blog.deleteMany({})
   // await Promise.all(helper.blogs.map(blog => new Blog(blog).save()));
@@ -77,7 +71,7 @@ test('default likes to 0 if missing', async () => {
     expect(blogLikes[blogLikes.length - 1]).toBe(0)
 })
 
-//checking if a blogpost without title or url fails to be added
+//checking if a blogpost without title or url fails to be added - 4.12
 test('blogpost without url or title is not added', async () => {
   const newPost = {
     author: "Ninja",
@@ -93,15 +87,6 @@ test('blogpost without url or title is not added', async () => {
   const blogAtEnd = await helper.blogsInDb()
 
   expect(blogAtEnd.length).toBe(helper.initialBlog.length)
-
-  // await Promise.all(helper.promiseArray.map(async (blog, i) => {
-  //   if (i === 0) delete blog.title;
-  //   else delete blog.url;
-  //   await api
-  //       .post('/api/blogs')
-  //       .send(blog)
-  //       .expect(400);
-// }));
 })
 
 
