@@ -10,15 +10,15 @@ const blogSchema = mongoose.Schema({
     type: String,
     required: true
 },
-author: {
+  author: {
     type: String,
     required: true
 },
-url: {
+  url: {
     type: String,
     required: true
 },
-likes: Number,
+  likes: Number,
   })
   
 blogSchema.set('toJSON', {

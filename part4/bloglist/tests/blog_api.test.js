@@ -6,17 +6,18 @@ const api = supertest(app)
 
 const Blog = require('../models/blog')
 
+
+// beforeEach(async () => {
+//   await Blog.deleteMany({});
+//   await Promise.all(helper.blogs.map(blog => new Blog(blog).save()));
+// });
+
 beforeEach(async () => {
   await Blog.deleteMany({})
-
-  let blogObject = new Blog(helper.initialBlog[0])
-  await blogObject.save()
-
-  blogObject = new Blog(helper.initialBlog[1])
-  await blogObject.save()
-
-  blogObject = new Blog(helper.initialBlog[2])
-  await blogObject.save()
+  // await Promise.all(helper.blogs.map(blog => new Blog(blog).save()));
+  const blogObjects = helper.initialBlog.map(blog => new Blog(blog))
+  const promiseArray = blogObjects.map(blog => blog.save())
+  await Promise.all(promiseArray)
 })
 
 //HTTP GET TEST 4.8
@@ -58,7 +59,6 @@ test('creating a new blog post', async () => {
 })
 
 // Checking if no likes param returns 0 - 4.11
-
 test('default likes to 0 if missing', async () => {
     const newPost = {
         title: "Where are my likes?",
@@ -76,6 +76,34 @@ test('default likes to 0 if missing', async () => {
     const blogLikes = blogAtEnd.map(blog => blog.likes)
     expect(blogLikes[blogLikes.length - 1]).toBe(0)
 })
+
+//checking if a blogpost without title or url fails to be added
+test('blogpost without url or title is not added', async () => {
+  const newPost = {
+    author: "Ninja",
+    likes: 3
+  }
+
+  await api
+  .post('/api/blogs')
+  .send(newPost)
+  .expect(400)
+  .expect('Content-Type', /application\/json/)
+
+  const blogAtEnd = await helper.blogsInDb()
+
+  expect(blogAtEnd.length).toBe(helper.initialBlog.length)
+
+  // await Promise.all(helper.promiseArray.map(async (blog, i) => {
+  //   if (i === 0) delete blog.title;
+  //   else delete blog.url;
+  //   await api
+  //       .post('/api/blogs')
+  //       .send(blog)
+  //       .expect(400);
+// }));
+})
+
 
 afterAll(() => {
   mongoose.connection.close()
