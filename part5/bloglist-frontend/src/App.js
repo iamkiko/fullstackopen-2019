@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import LoginForm from './components/LoginForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -19,15 +19,15 @@ const App = () => {
         .then(initialBlogs => setBlogs(initialBlogs))
   }, [])
 
-  //add useeffect for local storage
-//   useEffect(() => {
-//       const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
-//       if (loggedUserJSON){
-//           const user = JSON.parse(loggedUserJSON)
-//           setUser(user)
-//           blogService.setToken(user.token)
-//       }
-//   }, [])
+//   add useeffect for local storage
+  useEffect(() => {
+      const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
+      if (loggedUserJSON){
+          const user = JSON.parse(loggedUserJSON)
+          setUser(user)
+          blogService.setToken(user.token)
+      }
+  }, [])
 
   //add handleLogin to send form
   const handleLogin = async (event) => {
@@ -37,11 +37,11 @@ const App = () => {
               username, password,
           })
 
-        //   window.localStorage.setItem(
-        //       'loggedBlogUser', JSON.stringify(user)
-        //   )
+          window.localStorage.setItem(
+              'loggedBlogUser', JSON.stringify(user)
+          )
 
-        //   blogService.setToken(user.token)
+          blogService.setToken(user.token)
           setUser(user)
           setUsername('')
           setPassword('')
@@ -53,6 +53,11 @@ const App = () => {
       }
   }
 
+  const handleLogout = async (event) => {
+    window.localStorage.clear()
+    blogService.setToken(null)
+    setUser(null)
+  }
 
   const showBlogs = () => blogs.map(blog =>
     <Blog
@@ -91,7 +96,9 @@ if (user === null) {
     <div>
       <h2>Blogs</h2>
       <Notification message={errorMessage} />
-      <p>{user.name} logged in</p>
+      <p>{user.name} logged in
+      <button onClick={handleLogout}>Logout</button>
+      </p>
       {showBlogs()}
     </div>
   )
