@@ -4,13 +4,12 @@ import SuccessNotification from './components/SuccessNotification'
 import ErrorNotification from './components/ErrorNotification'
 import LoginForm from './components/LoginForm'
 import CreateBlog from './components/CreateBlog'
-// import Togglable from './components/Togglable'
+import Togglable from './components/Togglable'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 import './index.css' 
-import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -24,8 +23,6 @@ const App = () => {
   const [blogTitle, setBlogTitle] = useState('') 
   const [blogAuthor, setBlogAuthor] = useState('') 
   const [blogUrl, setBlogUrl] = useState('') 
-
-  const [newBlogVisible, setNewBlogVisible] = useState(false)
   
   //init blogs on page with useEffect - update to async/await?
   useEffect(() => {
@@ -82,36 +79,25 @@ const App = () => {
     />
     )
 
-    // const blogFormRef = React.createRef()
+  const blogFormRef = React.createRef()
 
-  const blogForm = () => {
-    const hideWhenVisible = {display: newBlogVisible ? 'none' : ''}
-    const showWhenVisible = {display: newBlogVisible ? '' : 'none'}
-
-    return (
-      <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setNewBlogVisible(true)}>Add Blog</button>
-        </div>
-        <div style={showWhenVisible}>
-        <CreateBlog 
-            addBlog={addBlog}
-            blogTitle={blogTitle}
-            setBlogTitle={setBlogTitle}
-            blogAuthor={blogAuthor}
-            setBlogAuthor={setBlogAuthor}
-            blogUrl={blogUrl}
-            setBlogUrl={setBlogUrl}
-        />
-        <button onClick={() => setNewBlogVisible(false)}>Cancel</button>
-        </div>
-      </div>
-    )
-  }
+  const blogForm = () => (
+    <Togglable buttonLabel="Add a blog" ref={blogFormRef}>
+      <CreateBlog 
+        addBlog={addBlog}
+        blogTitle={blogTitle}
+        setBlogTitle={setBlogTitle}
+        blogAuthor={blogAuthor}
+        setBlogAuthor={setBlogAuthor}
+        blogUrl={blogUrl}
+        setBlogUrl={setBlogUrl}
+      />
+    </Togglable>
+  )
 
   const addBlog = (event) => { //need to update to async/await
       event.preventDefault()
-
+      blogFormRef.current.toggleVisibility()
       const blogObject = {
           title: blogTitle,
           author: blogAuthor,
@@ -167,9 +153,7 @@ if (user === null) {
         <p>{user.name} logged in
         <button onClick={handleLogout}>Logout</button>
         </p>
-        {/* <Togglable buttonLabel="Add a blog"> */}
           {blogForm()}
-        {/* </Togglable> */}
       </div>
       <div>
       {showBlogs()}
