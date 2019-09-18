@@ -1,8 +1,6 @@
 import React from 'react'
 
 const CreateBlog = ({addBlog, blogTitle, setBlogTitle, blogAuthor, setBlogAuthor, blogUrl, setBlogUrl}) => {
-
-
     return (
     <div>
         <h2>Create New</h2>
@@ -38,6 +36,6 @@ const CreateBlog = ({addBlog, blogTitle, setBlogTitle, blogAuthor, setBlogAuthor
         </form>
     </div>
     )
-    }
+}
 
   export default CreateBlog
