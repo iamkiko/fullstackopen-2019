@@ -75,7 +75,6 @@ const App = () => {
     <Blog
         key={blog.id}
         blog={blog}
-        //requires author and title?
     />
     )
 
