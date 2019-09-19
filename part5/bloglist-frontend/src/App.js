@@ -71,10 +71,27 @@ const App = () => {
     setUser(null)
   }
 
+  //add sort method to organize by likes
+
+  const addLike = (id) => {
+    const blog = blogs.find(b => b.id === id)
+
+    const updatedBlog = {...blog, likes: blog.likes + 1}
+
+    blogService
+    .update(id, updatedBlog)
+    .then(returnedBlog => {
+       setBlogs(blogs.map(blog => blog.id !== id ? blog: returnedBlog))
+    }).catch(error => {
+       console.log(error)
+    })
+ }
+
   const showBlogs = () => blogs.map(blog =>
     <Blog
         key={blog.id}
         blog={blog}
+        addLike={() => addLike(blog.id)}
     />
     )
 
@@ -114,6 +131,8 @@ const App = () => {
       })
       successContent(`a new blog ${blogTitle} by ${blogAuthor} added`)
   }
+
+
   const errorContent = (message) => {
     setErrorMessage(message)
     setTimeout(() => {

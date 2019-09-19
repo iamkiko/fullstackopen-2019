@@ -1,12 +1,10 @@
 import React, { useState }  from 'react'
-const Blog = ({ blog }) => {
+
+const Blog = ({ blog, addLike }) => {
 
    const [fullBlog, setFullBlog] = useState(false)
 
    const fullBlogInfo = {display: fullBlog ? "" : "none"}
-
-
-   //will add like functionality
 
    const toggleVisibility = () => {
       setFullBlog(!fullBlog);
@@ -18,7 +16,7 @@ const Blog = ({ blog }) => {
       borderWidth: 1,
       marginBottom: 5
    }
-   // console.log("blog:", blog.user)
+
    return (
       <div style={blogStyle}>
          <div onClick={() => toggleVisibility()}>
@@ -28,7 +26,7 @@ const Blog = ({ blog }) => {
         <p>{blog.url}</p>
         <p>
           {blog.likes} likes
-          {/* <button onClick={() => handleLike()}>like</button> */}
+          <button onClick={addLike}>like</button>
         </p>
         
         <p>added by {blog.user.username} </p>
@@ -36,6 +34,5 @@ const Blog = ({ blog }) => {
       </div>
    )  
 }
-
 
 export default Blog
