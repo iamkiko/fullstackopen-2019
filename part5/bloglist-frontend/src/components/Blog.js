@@ -17,7 +17,6 @@ const Blog = ({ blog, addLike }) => {
       marginBottom: 5
    }
 
-   console.log(blog.user.username)
    return (
       <div style={blogStyle}>
          <div onClick={() => toggleVisibility()}>
