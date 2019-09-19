@@ -1,14 +1,29 @@
 import React, { useState }  from 'react'
+import blogService from '../services/blogs'
 
-const Blog = ({ blog, addLike }) => {
+const Blog = ({ blog, addLike,  bloglistAfterDelete}) => {
 
-   const [fullBlog, setFullBlog] = useState(false)
+   const [completeBlog, setCompleteBlog] = useState(false)
 
-   const fullBlogInfo = {display: fullBlog ? "" : "none"}
+   const completeBlogInfo = {display: completeBlog ? "" : "none"}
 
+ 
    const toggleVisibility = () => {
-      setFullBlog(!fullBlog);
-    };
+      setCompleteBlog(!completeBlog);
+    }
+
+    const deleteBlog = () => {
+      if(window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+        blogService.remove(blog.id)
+        .then(() => {
+         bloglistAfterDelete(blog.id)
+        })
+        .catch(error => {
+         console.log(error)
+      })
+      }
+    }
+    
    const blogStyle = {
       paddingTop: 10,
       paddingLeft: 2,
@@ -22,14 +37,14 @@ const Blog = ({ blog, addLike }) => {
          <div onClick={() => toggleVisibility()}>
             {blog.title} {blog.author}
          </div>
-         <div style={fullBlogInfo} className="fullInfo">
+         <div style={completeBlogInfo} className="fullInfo">
         <p>{blog.url}</p>
         <p>
           {blog.likes} likes
           <button onClick={addLike}>like</button>
         </p>
-        
         <p>added by {blog.user.username} </p>
+        <button onClick={() => deleteBlog(blog.id)}>delete</button>
         </div>
       </div>
    )  

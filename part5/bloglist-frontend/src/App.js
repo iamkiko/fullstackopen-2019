@@ -65,14 +65,15 @@ const App = () => {
       }
   }
 
+  //logout functionality
   const handleLogout = async (event) => {
     window.localStorage.clear()
     blogService.setToken(null)
     setUser(null)
   }
 
-  //add sort method to organize by likes
 
+//like button functionality
   const addLike = (id) => {
     const blog = blogs.find(b => b.id === id)
 
@@ -87,11 +88,18 @@ const App = () => {
     })
  }
 
+ //updating the bloglist to render once blog has been deleted
+ const bloglistAfterDelete = (id) => {
+  const latestBlogs = blogs.filter(b => b.id !== id)
+  setBlogs(latestBlogs)
+}
+
   const showBlogs = () => blogs.sort((a, b) => b.likes - a.likes).map(blog =>
     <Blog
         key={blog.id}
         blog={blog}
         addLike={() => addLike(blog.id)}
+        bloglistAfterDelete={bloglistAfterDelete}
     />
     )
 
