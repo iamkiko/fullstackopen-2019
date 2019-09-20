@@ -14,7 +14,8 @@
     "watch": "nodemon App.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "eslint": "eslint ."
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -33,6 +34,7 @@
   },
   "proxy": "http://localhost:3003",
   "devDependencies": {
+    "eslint-plugin-jest": "^22.17.0",
     "nodemon": "^1.19.2"
   }
 }

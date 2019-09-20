@@ -9,7 +9,7 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
-import './index.css' 
+import './index.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -20,50 +20,50 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
-  const [blogTitle, setBlogTitle] = useState('') 
-  const [blogAuthor, setBlogAuthor] = useState('') 
-  const [blogUrl, setBlogUrl] = useState('') 
-  
+  const [blogTitle, setBlogTitle] = useState('')
+  const [blogAuthor, setBlogAuthor] = useState('')
+  const [blogUrl, setBlogUrl] = useState('')
+
   //init blogs on page with useEffect - update to async/await?
   useEffect(() => {
-      blogService
-        .getAll()
-        .then(initialBlogs => setBlogs(initialBlogs))
+    blogService
+      .getAll()
+      .then(initialBlogs => setBlogs(initialBlogs))
   }, [])
 
-//   add useEffect for local storage
+  //   add useEffect for local storage
   useEffect(() => {
-      const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
-      if (loggedUserJSON){
-          const user = JSON.parse(loggedUserJSON)
-          setUser(user)
-          blogService.setToken(user.token)
-      }
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
+    if (loggedUserJSON){
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
   }, [])
 
   //add handleLogin to send form
   const handleLogin = async (event) => {
-      event.preventDefault()
-      try {
-          const user = await loginService.login({
-              username, password,
-          })
+    event.preventDefault()
+    try {
+      const user = await loginService.login({
+        username, password,
+      })
 
-          window.localStorage.setItem(
-              'loggedBlogUser', JSON.stringify(user)
-          )
+      window.localStorage.setItem(
+        'loggedBlogUser', JSON.stringify(user)
+      )
 
-          blogService.setToken(user.token)
-          setUser(user)
-          setUsername('')
-          setPassword('')
-          successContent(`Welcome back ${user.name}!`)
-        } catch(exception) {
-          errorContent('Wrong username or password')
-        //   setTimeout(() => {
-        //     setErrorMessage(null)
-        //   }, 5000)
-      }
+      blogService.setToken(user.token)
+      setUser(user)
+      setUsername('')
+      setPassword('')
+      successContent(`Welcome back ${user.name}!`)
+    } catch(exception) {
+      errorContent('Wrong username or password')
+      //   setTimeout(() => {
+      //     setErrorMessage(null)
+      //   }, 5000)
+    }
   }
 
   //logout functionality
@@ -74,42 +74,42 @@ const App = () => {
   }
 
 
-//like button functionality
+  //like button functionality
   const addLike = (id) => {
     const blog = blogs.find(b => b.id === id)
 
-    const updatedBlog = {...blog, likes: blog.likes + 1}
+    const updatedBlog = { ...blog, likes: blog.likes + 1 }
 
     blogService
-    .update(id, updatedBlog)
-    .then(returnedBlog => {
-       setBlogs(blogs.map(blog => blog.id !== id ? blog: returnedBlog))
-    }).catch(error => {
-       console.log(error)
-    })
- }
+      .update(id, updatedBlog)
+      .then(returnedBlog => {
+        setBlogs(blogs.map(blog => blog.id !== id ? blog: returnedBlog))
+      }).catch(error => {
+        console.log(error)
+      })
+  }
 
- //updating the bloglist to render once blog has been deleted
- const bloglistAfterDelete = (id) => {
-  const latestBlogs = blogs.filter(b => b.id !== id)
-  setBlogs(latestBlogs)
-}
+  //updating the bloglist to render once blog has been deleted
+  const bloglistAfterDelete = (id) => {
+    const latestBlogs = blogs.filter(b => b.id !== id)
+    setBlogs(latestBlogs)
+  }
 
   const showBlogs = () => blogs.sort((a, b) => b.likes - a.likes).map(blog =>
     <Blog
-        key={blog.id}
-        blog={blog}
-        user={user}
-        addLike={() => addLike(blog.id)}
-        bloglistAfterDelete={bloglistAfterDelete}
+      key={blog.id}
+      blog={blog}
+      user={user}
+      addLike={() => addLike(blog.id)}
+      bloglistAfterDelete={bloglistAfterDelete}
     />
-    )
+  )
 
   const blogFormRef = React.createRef()
 
   const blogForm = () => (
     <Togglable buttonLabel="Add a blog" ref={blogFormRef}>
-      <CreateBlog 
+      <CreateBlog
         addBlog={addBlog}
         blogTitle={blogTitle}
         setBlogTitle={setBlogTitle}
@@ -122,24 +122,24 @@ const App = () => {
   )
 
   const addBlog = (event) => { //need to update to async/await
-      event.preventDefault()
-      blogFormRef.current.toggleVisibility()
-      const blogObject = {
-          title: blogTitle,
-          author: blogAuthor,
-          url: blogUrl
-      }
+    event.preventDefault()
+    blogFormRef.current.toggleVisibility()
+    const blogObject = {
+      title: blogTitle,
+      author: blogAuthor,
+      url: blogUrl
+    }
 
-      blogService
+    blogService
       .create(blogObject)
       .then(addedBlog => {
-          setBlogs(blogs.concat(addedBlog))
-          setNewBlog('')
-          setBlogTitle('')
-          setBlogAuthor('')
-          setBlogUrl('')
+        setBlogs(blogs.concat(addedBlog))
+        setNewBlog('')
+        setBlogTitle('')
+        setBlogAuthor('')
+        setBlogUrl('')
       })
-      successContent(`a new blog ${blogTitle} by ${blogAuthor} added`)
+    successContent(`a new blog ${blogTitle} by ${blogAuthor} added`)
   }
 
 
@@ -151,13 +151,13 @@ const App = () => {
   }
 
   const successContent = (message) => {
-    setSuccessMessage(message);
+    setSuccessMessage(message)
     setTimeout(() => {
-      setSuccessMessage(null);
+      setSuccessMessage(null)
     }, 5000)
   }
 
-if (user === null) {
+  if (user === null) {
     return (
       <div>
         <h2>Log in to application</h2>
@@ -174,17 +174,17 @@ if (user === null) {
   }
 
   return (
-   <div>
     <div>
+      <div>
         <h2>Blogs</h2>
         <SuccessNotification message={successMessage}/>
         <p>{user.name} logged in
-        <button onClick={handleLogout}>Logout</button>
+          <button onClick={handleLogout}>Logout</button>
         </p>
-          {blogForm()}
+        {blogForm()}
       </div>
       <div>
-      {showBlogs()}
+        {showBlogs()}
       </div>
     </div>
   )
@@ -193,4 +193,4 @@ if (user === null) {
 
 
 
-export default App;
+export default App
