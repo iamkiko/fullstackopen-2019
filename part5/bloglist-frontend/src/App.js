@@ -98,6 +98,7 @@ const App = () => {
     <Blog
         key={blog.id}
         blog={blog}
+        user={user}
         addLike={() => addLike(blog.id)}
         bloglistAfterDelete={bloglistAfterDelete}
     />

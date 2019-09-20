@@ -1,12 +1,10 @@
 import React, { useState }  from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, addLike,  bloglistAfterDelete}) => {
-
+const Blog = ({ blog, addLike, user, bloglistAfterDelete}) => {
    const [completeBlog, setCompleteBlog] = useState(false)
 
    const completeBlogInfo = {display: completeBlog ? "" : "none"}
-
  
    const toggleVisibility = () => {
       setCompleteBlog(!completeBlog);
@@ -32,22 +30,42 @@ const Blog = ({ blog, addLike,  bloglistAfterDelete}) => {
       marginBottom: 5
    }
 
-   return (
-      <div style={blogStyle}>
-         <div onClick={() => toggleVisibility()}>
-            {blog.title} {blog.author}
+   if(user.username === blog.user.username) {
+      return (
+         <div style={blogStyle}>
+            <div onClick={() => toggleVisibility()}>
+               {blog.title} {blog.author}
+            </div>
+            <div style={completeBlogInfo} className="fullInfo">
+           <p>{blog.url}</p>
+           <p>
+             {blog.likes} likes
+             <button onClick={addLike}>like</button>
+           </p>
+           <p>added by {blog.user.username} </p>
+           <button onClick={() => deleteBlog(blog.id)}>delete</button>
+           </div>
          </div>
-         <div style={completeBlogInfo} className="fullInfo">
-        <p>{blog.url}</p>
-        <p>
-          {blog.likes} likes
-          <button onClick={addLike}>like</button>
-        </p>
-        <p>added by {blog.user.username} </p>
-        <button onClick={() => deleteBlog(blog.id)}>delete</button>
-        </div>
-      </div>
-   )  
+      )  
+   } else {
+      return (
+         <div style={blogStyle}>
+            <div onClick={() => toggleVisibility()}>
+               {blog.title} {blog.author}
+            </div>
+            <div style={completeBlogInfo} className="fullInfo">
+           <p>{blog.url}</p>
+           <p>
+             {blog.likes} likes
+             <button onClick={addLike}>like</button>
+           </p>
+           <p>added by {blog.user.username} </p>
+           
+           </div>
+         </div>
+      )  
+   }
+
 }
 
 export default Blog
