@@ -57,6 +57,7 @@ const App = () => {
           setUser(user)
           setUsername('')
           setPassword('')
+          successContent(`Welcome back ${user.name}!`)
         } catch(exception) {
           errorContent('Wrong username or password')
         //   setTimeout(() => {

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ErrorNotification = ({ message }) => {
+const SuccessNotification = ({ message }) => {
   if (message === null) {
     return null
   }
@@ -12,4 +12,4 @@ const ErrorNotification = ({ message }) => {
   )
 }
 
-  export default ErrorNotification
+  export default SuccessNotification
