@@ -42,4 +42,16 @@ describe("Blog tests", () => {
     expect(basicInfo).toHaveTextContent('kiko')
     expect(fullInfo).toHaveStyle('display: none')
   })
+
+  test("when blogpost is clicked - all info is visible", () => {
+    const basicInfo = component.container.querySelector('.basicInfo')
+    const fullInfo = component.container.querySelector('.fullInfo')
+
+    fireEvent.click(basicInfo)
+
+    expect(basicInfo).toHaveTextContent("ela kentro")
+    expect(basicInfo).toHaveTextContent("kiko")
+
+    expect(fullInfo).not.toHaveStyle("display: none")
+  })
 })
