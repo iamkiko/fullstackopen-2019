@@ -31,41 +31,46 @@ const Blog = ({ blog, addLike, user, bloglistAfterDelete }) => {
     marginBottom: 5
   }
 
-  if(user.username === blog.user.username) {
-    return (
-      <div style={blogStyle}>
-        <div onClick={() => toggleVisibility()}>
-          {blog.title} {blog.author}
-        </div>
-        <div style={completeBlogInfo} className="fullInfo">
-          <p>{blog.url}</p>
-          <p>
-            {blog.likes} likes
-            <button onClick={addLike}>like</button>
-          </p>
-          <p>added by {blog.user.username} </p>
-          <button onClick={() => deleteBlog(blog.id)}>delete</button>
-        </div>
-      </div>
-    )
-  } else {
-    return (
-      <div style={blogStyle}>
-        <div onClick={() => toggleVisibility()}>
-          {blog.title} {blog.author}
-        </div>
-        <div style={completeBlogInfo} className="fullInfo">
-          <p>{blog.url}</p>
-          <p>
-            {blog.likes} likes
-            <button onClick={addLike}>like</button>
-          </p>
-          <p>added by {blog.user.username} </p>
+  const deleteButtonVisible = blog.user.username === user.username ? true : false
 
+  const showDeleteButton = {
+    display: deleteButtonVisible ? "" : "none"
+  }
+  // if(user.username === blog.user.username) {
+    return (
+      <div style={blogStyle}>
+        <div onClick={() => toggleVisibility()} className="basicInfo">
+          {blog.title} {blog.author}
+        </div>
+        <div style={completeBlogInfo} className="fullInfo">
+          <p>{blog.url}</p>
+          <p>
+            {blog.likes} likes
+            <button onClick={addLike}>like</button>
+          </p>
+          <p>added by {blog.user.username} </p>
+          <button style={showDeleteButton} onClick={() => deleteBlog(blog.id)}>delete</button>
         </div>
       </div>
     )
-  }
+  // } else {
+  //   return (
+  //     <div style={blogStyle}>
+  //       <div onClick={() => toggleVisibility()}>
+  //         {blog.title} {blog.author}
+  //       </div>
+  //       <div style={completeBlogInfo} className="fullInfo">
+  //         <p>{blog.url}</p>
+  //         <p>
+  //           {blog.likes} likes
+  //           <button onClick={addLike}>like</button>
+  //         </p>
+  //         <p>added by {blog.user.username} </p>
+
+  //       </div>
+  //     </div>
+  //   )
+  // }
 
 }
 

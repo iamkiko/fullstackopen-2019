@@ -43,4 +43,5 @@ describe('Simpleblog tests', () => {
 
     expect(mockHandler.mock.calls.length).toBe(2)
   })
+
 })
