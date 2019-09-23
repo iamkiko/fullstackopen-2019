@@ -58,6 +58,8 @@ const App = () => {
 
       blogService.setToken(user.token)
       setUser(user)
+      username.reset()
+      password.reset()
       successContent(`Welcome back ${user.name}!`)
     } catch(exception) {
       errorContent("Wrong username or password")
