@@ -1,28 +1,29 @@
-import React, { useState, useEffect } from 'react'
-import Blog from './components/Blog'
-import SuccessNotification from './components/SuccessNotification'
-import ErrorNotification from './components/ErrorNotification'
-import LoginForm from './components/LoginForm'
-import CreateBlog from './components/CreateBlog'
-import Togglable from './components/Togglable'
+import React, { useState, useEffect } from "react"
+import Blog from "./components/Blog"
+import SuccessNotification from "./components/SuccessNotification"
+import ErrorNotification from "./components/ErrorNotification"
+import LoginForm from "./components/LoginForm"
+import CreateBlog from "./components/CreateBlog"
+import Togglable from "./components/Togglable"
 
-import blogService from './services/blogs'
-import loginService from './services/login'
+import blogService from "./services/blogs"
+import loginService from "./services/login"
+import { useField } from "./hooks"
 
-import './index.css'
+import "./index.css"
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newBlog, setNewBlog] = useState('')
+  const [newBlog, setNewBlog] = useState("")
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const username = useField("username")
+  const password = useField("password")
   const [user, setUser] = useState(null)
 
-  const [blogTitle, setBlogTitle] = useState('')
-  const [blogAuthor, setBlogAuthor] = useState('')
-  const [blogUrl, setBlogUrl] = useState('')
+  const [blogTitle, setBlogTitle] = useState("")
+  const [blogAuthor, setBlogAuthor] = useState("")
+  const [blogUrl, setBlogUrl] = useState("")
 
   //init blogs on page with useEffect - update to async/await?
   useEffect(() => {
@@ -33,7 +34,7 @@ const App = () => {
 
   //   add useEffect for local storage
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
+    const loggedUserJSON = window.localStorage.getItem("loggedBlogUser")
     if (loggedUserJSON){
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
@@ -44,22 +45,22 @@ const App = () => {
   //add handleLogin to send form
   const handleLogin = async (event) => {
     event.preventDefault()
+   
     try {
       const user = await loginService.login({
-        username, password,
+        username: username.value,
+        password: password.value
       })
 
       window.localStorage.setItem(
-        'loggedBlogUser', JSON.stringify(user)
+        "loggedBlogUser", JSON.stringify(user)
       )
 
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
       successContent(`Welcome back ${user.name}!`)
     } catch(exception) {
-      errorContent('Wrong username or password')
+      errorContent("Wrong username or password")
       //   setTimeout(() => {
       //     setErrorMessage(null)
       //   }, 5000)
@@ -134,10 +135,10 @@ const App = () => {
       .create(blogObject)
       .then(addedBlog => {
         setBlogs(blogs.concat(addedBlog))
-        setNewBlog('')
-        setBlogTitle('')
-        setBlogAuthor('')
-        setBlogUrl('')
+        setNewBlog("")
+        setBlogTitle("")
+        setBlogAuthor("")
+        setBlogUrl("")
       })
     successContent(`a new blog ${blogTitle} by ${blogAuthor} added`)
   }
@@ -166,8 +167,6 @@ const App = () => {
           handleLogin={handleLogin}
           username={username}
           password={password}
-          setUsername={setUsername}
-          setPassword={setPassword}
 	    	/>
       </div>
     )
