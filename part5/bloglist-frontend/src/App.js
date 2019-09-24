@@ -14,7 +14,7 @@ import "./index.css"
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newBlog, setNewBlog] = useState("")
+  // const [newBlog, setNewBlog] = useState("")
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
   const username = useField("username")
@@ -49,7 +49,7 @@ const App = () => {
   //add handleLogin to send form
   const handleLogin = async (event) => {
     event.preventDefault()
-   
+
     try {
       const user = await loginService.login({
         username: username.value,
@@ -125,25 +125,26 @@ const App = () => {
     </Togglable>
   )
 
-  const addBlog = (event) => { //need to update to async/await
+  const addBlog = async (event) => { //need to update to async/await
     event.preventDefault()
     blogFormRef.current.toggleVisibility()
-    const blogObject = {
-      title: title.value,
-      author: author.value,
-      url: url.value
-    }
 
-    blogService
-      .create(blogObject)
-      .then(addedBlog => {
-        setBlogs(blogs.concat(addedBlog))
-        setNewBlog("")
-        title.reset()
-        author.reset()
-        url.reset()
-      })
-    successContent(`a new blog added: ${title.value} by ${author.value}`)
+    try {
+      const newBlog = {
+        title: title.value,
+        author: author.value,
+        url: url.value
+      }
+
+      const addedBlog = await blogService.create(newBlog)
+      setBlogs(blogs.concat(addedBlog))
+      title.reset()
+      author.reset()
+      url.reset()
+      successContent(`a new blog added: ${title.value} by ${author.value}`)
+    } catch (error) {
+      errorContent(error)
+    }
   }
 
 
