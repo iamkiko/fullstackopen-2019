@@ -10,13 +10,13 @@ const LoginForm = ({ handleLogin, username, password }) => {
       <div>
             username:
         <input
-          {...username}
+          {...username.excludeReset}
         />
       </div>
       <div>
             password:
         <input
-          {...password}
+          {...password.excludeReset}
         />
       </div>
       <button type="submit">Login!</button>
