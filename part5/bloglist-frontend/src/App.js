@@ -21,9 +21,13 @@ const App = () => {
   const password = useField("password")
   const [user, setUser] = useState(null)
 
-  const [blogTitle, setBlogTitle] = useState("")
-  const [blogAuthor, setBlogAuthor] = useState("")
-  const [blogUrl, setBlogUrl] = useState("")
+  // const [blogTitle, setBlogTitle] = useState("")
+  // const [blogAuthor, setBlogAuthor] = useState("")
+  // const [blogUrl, setBlogUrl] = useState("")
+
+  const title = useField("text")
+  const author = useField("text")
+  const url = useField("text")
 
   //init blogs on page with useEffect - update to async/await?
   useEffect(() => {
@@ -114,12 +118,9 @@ const App = () => {
     <Togglable buttonLabel="Add a blog" ref={blogFormRef}>
       <CreateBlog
         addBlog={addBlog}
-        blogTitle={blogTitle}
-        setBlogTitle={setBlogTitle}
-        blogAuthor={blogAuthor}
-        setBlogAuthor={setBlogAuthor}
-        blogUrl={blogUrl}
-        setBlogUrl={setBlogUrl}
+        title={title}
+        author={author}
+        url={url}
       />
     </Togglable>
   )
@@ -128,9 +129,9 @@ const App = () => {
     event.preventDefault()
     blogFormRef.current.toggleVisibility()
     const blogObject = {
-      title: blogTitle,
-      author: blogAuthor,
-      url: blogUrl
+      title: title.value,
+      author: author.value,
+      url: url.value
     }
 
     blogService
@@ -138,11 +139,11 @@ const App = () => {
       .then(addedBlog => {
         setBlogs(blogs.concat(addedBlog))
         setNewBlog("")
-        setBlogTitle("")
-        setBlogAuthor("")
-        setBlogUrl("")
+        title.reset()
+        author.reset()
+        url.reset()
       })
-    successContent(`a new blog ${blogTitle} by ${blogAuthor} added`)
+    successContent(`a new blog added: ${title.value} by ${author.value}`)
   }
 
 

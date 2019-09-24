@@ -1,41 +1,32 @@
-import React from 'react'
+import React from "react"
 
-const CreateBlog = ({addBlog, blogTitle, setBlogTitle, blogAuthor, setBlogAuthor, blogUrl, setBlogUrl}) => {
-    return (
+const CreateBlog = ({ addBlog, title, author, url }) => {
+  return (
     <div>
-        <h2>Create New</h2>
-        <form onSubmit={addBlog}>
+      <h2>Create New</h2>
+      <form onSubmit={addBlog}>
         <div>
-            title:
-            <input
-            type="text"
-            value={blogTitle}
-            name="title"
-            onChange={({ target }) => setBlogTitle(target.value)}
-            />
+                title:
+          <input
+            {...title}
+          />
         </div>
         <div>
-            author:
-            <input
-            type="text"
-            value={blogAuthor}
-            name="author"
-            onChange={({ target }) => setBlogAuthor(target.value)}
-            />
+                author:
+          <input
+            {...author}
+          />
         </div>
         <div>
-            url:
-            <input
-            type="text"
-            value={blogUrl}
-            name="url"
-            onChange={({ target }) => setBlogUrl(target.value)}
-            />
-        </div>            
+                url:
+          <input
+            {...url}
+          />
+        </div>
         <button type="submit">Create</button>
-        </form>
+      </form>
     </div>
-    )
+  )
 }
 
-  export default CreateBlog
+export default CreateBlog
