@@ -82,18 +82,16 @@ const App = () => {
 
 
   //like button functionality
-  const addLike = (id) => {
+  const addLike = async (id) => {
     const blog = blogs.find(b => b.id === id)
-
     const updatedBlog = { ...blog, likes: blog.likes + 1 }
-
-    blogService
-      .update(id, updatedBlog)
-      .then(returnedBlog => {
-        setBlogs(blogs.map(blog => blog.id !== id ? blog: returnedBlog))
-      }).catch(error => {
-        console.log(error)
-      })
+    try {
+      const returnedBlog = await blogService.update(id, updatedBlog)
+      setBlogs(blogs.map(blog => blog.id !== id ? blog: returnedBlog))
+    }
+    catch(error) {
+      errorContent(error)
+    }  
   }
 
   //updating the bloglist to render once blog has been deleted
