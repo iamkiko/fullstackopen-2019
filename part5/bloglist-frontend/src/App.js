@@ -17,14 +17,9 @@ const App = () => {
   // const [newBlog, setNewBlog] = useState("")
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
+  const [user, setUser] = useState(null)
   const username = useField("username")
   const password = useField("password")
-  const [user, setUser] = useState(null)
-
-  // const [blogTitle, setBlogTitle] = useState("")
-  // const [blogAuthor, setBlogAuthor] = useState("")
-  // const [blogUrl, setBlogUrl] = useState("")
-
   const title = useField("text")
   const author = useField("text")
   const url = useField("text")
