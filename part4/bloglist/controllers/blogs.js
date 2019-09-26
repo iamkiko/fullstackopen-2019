@@ -3,8 +3,6 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
-
-
 blogsRouter.get('/', async (request, response) => { // / = /api/blogs
    const blogs = await Blog.find({}).populate('user', {username: 1, name: 1})
 
@@ -26,7 +24,7 @@ blogsRouter.get('/:id', async (request, response, next) => {
 
 blogsRouter.post('/', async (request, response, next) => {
     const body = request.body
-
+    console.log(body)
     try {
       if(!request.token || !request.token.id) {
         return response.status(401).json({ error: 'token missing or invalid' })
@@ -42,10 +40,13 @@ blogsRouter.post('/', async (request, response, next) => {
         user: user._id
     })
   
-        const savedBlog = await blog.save()
+    const savedBlog = await blog.save()
         user.blogs = user.blogs.concat(savedBlog._id)
         await user.save()
-        response.json(savedBlog.toJSON())
+        const result = await Blog.findById(savedBlog._id).populate(
+          'user', {username: 1, name: 1
+          })
+        response.json(result.toJSON())
     } catch (exception) {
         next(exception)
     }
@@ -63,12 +64,15 @@ blogsRouter.put('/:id', async (request, response, next) => {
       title: body.title,
       author: body.author,
       url: body.url,
-      likes: body.likes
+      likes: body.likes,
     }
 
     const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
       new: true
-    })
+    }).populate(
+      'user', {username: 1, name: 1
+      })
+
     response.json(updatedBlog.toJSON())
     } catch (exception) {
       next(exception)
@@ -77,7 +81,6 @@ blogsRouter.put('/:id', async (request, response, next) => {
   
 
 blogsRouter.delete('/:id', async (request, response, next) => {
- 
   try {
     if(!request.token || !request.token.id) {
       return response.status(401).json({ error: 'token missing or invalid' })
@@ -95,8 +98,5 @@ blogsRouter.delete('/:id', async (request, response, next) => {
         next(exception)
     }
 })
-
-
-
 
 module.exports = blogsRouter
