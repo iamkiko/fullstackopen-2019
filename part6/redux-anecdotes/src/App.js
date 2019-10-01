@@ -11,6 +11,7 @@ const App = (props) => {
       id: id
     })
   }
+  console.log('latest state', anecdotes)
 
   const addAnecdote = (event) => {
     event.preventDefault()

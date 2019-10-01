@@ -25,14 +25,14 @@ const reducer = (state = initialState, action) => {
     case 'VOTE':
       const anecdoteToVote = state.find(a => a.id === action.id)
       return state.map(anecdote => 
-        anecdote.id !== action.id ? anecdote 
-        : {...anecdote, votes: anecdoteToVote.votes +1}
-        )
+                    anecdote.id !== action.id ? anecdote 
+                    : {...anecdote, votes: anecdoteToVote.votes +1}
+                    ).sort((a, b) => b.votes - a.votes)
     case 'NEW_ANECDOTE':
       return [...state, action.data]
       default: 
         return state
   }
-}
+}  
 
 export default reducer
