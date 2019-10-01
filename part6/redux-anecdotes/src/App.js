@@ -1,15 +1,12 @@
 import React from 'react';
-import {getId } from './reducers/anecdoteReducer'
+import { createAnecdote, addVote } from './reducers/anecdoteReducer'
 import { store } from './index'
 
 const App = (props) => {
   const anecdotes = props.store.getState()
 
   const vote = (id) => {
-    store.dispatch({
-      type: 'VOTE',
-      id: id
-    })
+    store.dispatch(addVote(id))
   }
   console.log('latest state', anecdotes)
 
@@ -17,14 +14,7 @@ const App = (props) => {
     event.preventDefault()
     const content = event.target.anecdote.value
 
-    store.dispatch({
-      type: 'NEW_ANECDOTE',
-      data: {
-        content,
-        id: getId(),
-        votes: 0
-      }
-    })
+    store.dispatch(createAnecdote(content))
     event.target.anecdote.value = ""
   }
   return (
