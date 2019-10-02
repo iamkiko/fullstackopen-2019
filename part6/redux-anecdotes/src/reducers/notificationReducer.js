@@ -1,22 +1,24 @@
-// const initialState = action.data.content
+const initialState = ""
 
-const notificationReducer = (state = "TEST", action) => {
-  // console.log("NOTIFICATION: ", action.data.content)
-    switch (action.type) {
-      case 'SHOW_NOTIFICATION':
-        return action.data.content
+const notificationReducer = (state = initialState, action) => { 
+
+   console.log('notificationReducer: ', state, action)
+  switch (action.type) {
+      case 'SET_NOTIFICATION':
+        return action.data
       default:
         return state
     }
   }
   
-  //action creator function
-  export const setNotification = (notification) => {
+  //action creator functions
+  export const setNotification = (content) => {
      return {
-        type: 'SHOW_NOTIFICATION',
-        notification
+         type: 'SET_NOTIFICATION',
+         data: {
+           content
+         }
       }
-  
-  }
+    }
   
   export default notificationReducer

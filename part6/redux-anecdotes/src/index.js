@@ -12,8 +12,6 @@ const reducer = combineReducers({
 
 const store = createStore(reducer)
 
-console.log(store.getState())
-
 const render = () => {
   ReactDOM.render(
     <App store={store} />,
