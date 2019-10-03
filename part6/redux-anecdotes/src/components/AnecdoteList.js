@@ -13,17 +13,12 @@ const AnecdoteList = ({ store }) => {
     }, 5000)
   }
 
-  //cannot append map to this
-  // const anecdotesToShow = () => {
-  //   anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(filter.toLowerCase()))
-  // } 
-
-  // console.log(anecdotesToShow)
+  const anecdotesToShow = anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(filter.toLowerCase()))
+  
+  console.log('anecdotesToShow: ', anecdotesToShow)
     return (
         <div>
-        {anecdotes.filter(anecdote => 
-          anecdote.content.toLowerCase().includes(filter.toLowerCase())) //this does two iterations of array, not most performant
-          .map(anecdote =>
+        {anecdotesToShow.map(anecdote =>  //this does two iterations of array, not most performant
             <div key={anecdote.id}>
               <div>
                 {anecdote.content}
