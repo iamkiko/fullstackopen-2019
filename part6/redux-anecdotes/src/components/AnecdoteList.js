@@ -4,7 +4,7 @@ import { setNotification } from '../reducers/notificationReducer'
 
 const AnecdoteList = ({ store }) => {
 
-  const anecdotes = store.getState().anecdotes
+  const { anecdotes, filter } = store.getState()
   const vote = (anecdote) => {
     store.dispatch(addVote(anecdote.id))
     store.dispatch(setNotification(`You voted for ${anecdote.content}`))
@@ -13,9 +13,17 @@ const AnecdoteList = ({ store }) => {
     }, 5000)
   }
 
+  //cannot append map to this
+  // const anecdotesToShow = () => {
+  //   anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(filter.toLowerCase()))
+  // } 
+
+  // console.log(anecdotesToShow)
     return (
         <div>
-        {anecdotes.map(anecdote =>
+        {anecdotes.filter(anecdote => 
+          anecdote.content.toLowerCase().includes(filter.toLowerCase())) //this does two iterations of array, not most performant
+          .map(anecdote =>
             <div key={anecdote.id}>
               <div>
                 {anecdote.content}
