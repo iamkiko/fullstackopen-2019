@@ -47,7 +47,7 @@ const mapStateToProps = (state) => {
 //       dispatch(setNotification(`You voted for ${anecdote.content}`))
 //     }
 //   }
-}
+// }
 
 const ConnectedAnecdotes = connect(mapStateToProps)(AnecdoteList)
 export default ConnectedAnecdotes
