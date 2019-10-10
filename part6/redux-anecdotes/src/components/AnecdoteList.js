@@ -3,19 +3,16 @@ import { connect } from 'react-redux'
 import { addVote } from '../reducers/anecdoteReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
-const AnecdoteList = (props) => {
-  // const { anecdotes, filter } = store.getState()
+const AnecdoteList = ({addVote, setNotification, anecdotes, filter}) => {
   const vote = (anecdote) => {
-    props.store.dispatch(addVote(anecdote.id))
-    props.store.dispatch(setNotification(`You voted for ${anecdote.content}`))
-    setTimeout(() => {
-      props.store.dispatch(setNotification(null))
-    }, 5000)
+      addVote(anecdote.id)
+      setNotification(`You voted for ${anecdote.content}`)
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
   }
 
-  const anecdotesToShow = props.anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(filter.toLowerCase()))
-  
-  console.log('anecdotesToShow: ', anecdotesToShow)
+  const anecdotesToShow = anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(filter.toLowerCase()))
     return (
         <div>
         {anecdotesToShow.map(anecdote =>  //this does two iterations of array, not most performant
@@ -33,6 +30,10 @@ const AnecdoteList = (props) => {
     )
 }
 
+
+  
+
+
 const mapStateToProps = (state) => {
   console.log(state)
   return {
@@ -41,13 +42,11 @@ const mapStateToProps = (state) => {
   }
 }
 
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     setNotification: value => {
-//       dispatch(setNotification(`You voted for ${anecdote.content}`))
-//     }
-//   }
-// }
+const mapDispatchToProps = {
+  addVote,
+  setNotification
+}
 
-const ConnectedAnecdotes = connect(mapStateToProps)(AnecdoteList)
-export default ConnectedAnecdotes
+export default connect(
+  mapStateToProps, mapDispatchToProps
+  )(AnecdoteList)
