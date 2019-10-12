@@ -5,7 +5,7 @@ import { setNotification } from '../reducers/notificationReducer'
 
 const AnecdoteList = (props) => {
   const vote = (anecdote) => {
-      props.addVote(anecdote.id)
+      props.addVote(anecdote)
       props.setNotification(`You voted for ${anecdote.content}`)
       setTimeout(() => {
         props.setNotification(null)
@@ -30,12 +30,12 @@ const AnecdoteList = (props) => {
 }
 
 const anecdotesToShow = ({anecdotes, filter}) => {
-  console.log(anecdotes.content)
+  console.log("anecdotes", anecdotes)
   return anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(filter.toLowerCase()))
 }
 
 const mapStateToProps = (state) => {
-  console.log(state)
+  console.log("mapStateToProps's State", state)
   return {
     visibleAnecdotes: anecdotesToShow(state),
     filter: state.filter
