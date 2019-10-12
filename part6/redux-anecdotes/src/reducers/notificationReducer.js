@@ -1,8 +1,4 @@
-const initialState = ""
-
-const notificationReducer = (state = initialState, action) => { 
-
-  //  console.log('notificationReducer: ', state, action)
+const notificationReducer = (state = null, action) => { 
   switch (action.type) {
       case 'SET_NOTIFICATION':
         return action.data
@@ -11,14 +7,19 @@ const notificationReducer = (state = initialState, action) => {
     }
   }
   
-  //action creator functions
-  export const setNotification = (content) => {
-     return {
-         type: 'SET_NOTIFICATION',
-         data: {
-           content
-         }
-      }
-    }
+  export const setNotification = (content, duration) => {
+    return dispatch => {
+      dispatch({
+        type: 'SET_NOTIFICATION',
+        data: content
+      })
+        setTimeout(() => {
+          dispatch({
+            type: 'SET_NOTIFICATION',
+            data: null
+          })
+        }, duration * 1000)
+   }
+  }
   
   export default notificationReducer
