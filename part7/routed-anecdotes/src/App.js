@@ -131,10 +131,10 @@ const App = () => {
       setNotification('')
     }, 10000)
   }
+
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
-  
   }
 
   const anecdoteById = (id) =>
@@ -142,16 +142,12 @@ const App = () => {
 
   const vote = (id) => {
     const anecdote = anecdoteById(id)
-
     const voted = {
       ...anecdote,
       votes: anecdote.votes + 1
     }
-
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
-
-  // const newAnec = withRouter(addNew)
 
   return (
     <Router>
@@ -162,9 +158,9 @@ const App = () => {
           <div>{notification}</div>
         </div>
           <Route exact path="/" render={() => <AnecdoteList anecdotes={anecdotes} />} />
-          {/* <Route exact path="/create" render={() =>
-           newAnec ? <Redirect to="/" /> : <CreateNew addNew={addNew} />} /> */}
-          <Route exact path="/create" render={() =>  <NewAnecdote addNew={addNew} addNotification={addNotification} />} />
+          <Route exact path="/create" render={() =>  
+            <NewAnecdote addNew={addNew} addNotification={addNotification} />}
+          />
           <Route exact path="/about" render={() => <About />}/>
           <Route exact path="/anecdotes/:id" render={({ match }) =>
             <Anecdote anecdotes={anecdoteById(match.params.id)} />}  
