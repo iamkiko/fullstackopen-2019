@@ -7,14 +7,14 @@ import Notification from "./components/Notification"
 import Togglable from "./components/Togglable"
 import { useField } from "./hooks"
 
-const App = () => {
+import { connect } from "react-redux"
+import { setNotification } from "./reducers/notificationReducer"
+
+const App = (props) => {
   const [username] = useField("text")
   const [password] = useField("password")
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState({
-    message: null
-  })
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
@@ -32,8 +32,8 @@ const App = () => {
   }, [])
 
   const notify = (message, type = "success") => {
-    setNotification({ message, type })
-    setTimeout(() => setNotification({ message: null }), 10000)
+    props.setNotification({ message, type })
+    setTimeout(() => props.setNotification({ message: null, type: null  }), 10000)
   }
 
   const handleLogin = async (event) => {
@@ -47,6 +47,7 @@ const App = () => {
       window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
+      notify(`Welcome back ${user.name}`)
     } catch (exception) {
       notify("Wrong username or password", "error")
     }
@@ -73,11 +74,11 @@ const App = () => {
   }
 
   const removeBlog = async (blog) => {
-    const removeConfirmation = window.confirm(`remove blog ${blog.title} by ${blog.author}`)
+    const removeConfirmation = window.confirm(`remove blog ${blog.title} by ${blog.author}?`)
     if (removeConfirmation) {
-      const updatedBlog = await blogService.remove(blog)
+      const updatedBlog = await blogService.remove(blog) //if used in notify(), returns undefined
       setBlogs(blogs.filter(b => b.id !== blog.id))
-      notify(`Blog ${updatedBlog.title} by ${updatedBlog.author} removed!`)
+      notify(`Blog ${blog.title} by ${blog.author} removed!`)
     }
   }
 
@@ -86,7 +87,7 @@ const App = () => {
       <div>
         <h2>Log in to application</h2>
 
-        <Notification notification={notification} />
+        <Notification />
 
         <form onSubmit={handleLogin}>
           <div>
@@ -111,7 +112,7 @@ const App = () => {
     <div>
       <h2>Blogs</h2>
 
-      <Notification notification={notification} />
+      <Notification  />
 
       <p>{user.name} is logged in</p>
       <button onClick={handleLogout}>Logout</button>
@@ -134,4 +135,12 @@ const App = () => {
   )
 }
 
-export default App
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setNotification: (message, type) => {
+      dispatch(setNotification(message, type))
+    },
+  }
+}
+
+export default connect(null, mapDispatchToProps)(App)
