@@ -138,6 +138,7 @@ const App = (props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     initializeBlogs: () => dispatch(initializeBlogs()),
+    likeBlog: (blog) => dispatch(likeBlog(blog)),
     setNotification: (message, type) => {
       dispatch(setNotification(message, type))
     },

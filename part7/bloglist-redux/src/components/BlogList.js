@@ -42,7 +42,7 @@ const BlogList = (props) => {
       <Blog
         key={blog.id}
         blog={blog}
-        like={() => likeBlog(blog)}
+        like={() => props.likeBlog(blog)}
         remove={() => deleteBlogFromList(blog, blog.id)}
         user={blog.user}
         loggedInUser={props.loggedInUser}

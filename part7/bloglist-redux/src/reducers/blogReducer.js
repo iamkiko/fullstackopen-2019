@@ -44,6 +44,7 @@ export const deleteBlog = blogId => {
 export const likeBlog = blog => {
   const likedBlog = { ...blog, likes: blog.likes + 1 }
   const blogId = blog.id
+  console.log("blogID: ", blogId)
   return async(dispatch) => {
     const updatedBlog = await blogService.update(blogId, likedBlog)
     dispatch({
