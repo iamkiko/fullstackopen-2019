@@ -1,27 +1,33 @@
 import React, { useState, useEffect } from "react"
-import Blog from "./components/Blog"
+import NewBlog from "./components/NewBlog"
 import blogService from "./services/blogs"
 import loginService from "./services/login"
-import NewBlog from "./components/NewBlog"
+// import LoginForm from "./components/LoginForm"
 import Notification from "./components/Notification"
+import BlogList from "./components/BlogList"
 import Togglable from "./components/Togglable"
 import { useField } from "./hooks"
 
 import { connect } from "react-redux"
 import { setNotification } from "./reducers/notificationReducer"
+import { initializeBlogs, likeBlog,
+  deleteBlog, createBlog } from "./reducers/blogReducer"
 
 const App = (props) => {
-  const [username] = useField("text")
-  const [password] = useField("password")
-  const [blogs, setBlogs] = useState([])
+
+  //React internal state
+  const username = useField("text")
+  const password = useField("password")
+
   const [user, setUser] = useState(null)
+  // const [blogs, setBlogs] = useState([])
 
+  const fetchBlogs = props.initializeBlogs
   useEffect(() => {
-    blogService.getAll().then(blogs => {
-      setBlogs(blogs)
-    })
-  }, [])
+    fetchBlogs()
+  }, [fetchBlogs])
 
+  //action
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser")
     if (loggedUserJSON) {
@@ -31,11 +37,13 @@ const App = (props) => {
     }
   }, [])
 
+  //action
   const notify = (message, type = "success") => {
     props.setNotification({ message, type })
     setTimeout(() => props.setNotification({ message: null, type: null  }), 10000)
   }
 
+  //login component
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -53,35 +61,15 @@ const App = (props) => {
     }
   }
 
+  //logout component
   const handleLogout = () => {
     setUser(null)
     blogService.destroyToken()
     window.localStorage.removeItem("loggedBlogAppUser")
   }
 
-  const createBlog = async (blog) => {
-    const createdBlog = await blogService.create(blog)
-    newBlogRef.current.toggleVisibility()
-    setBlogs(blogs.concat(createdBlog))
-    notify(`A new blog ${createdBlog.title} by ${createdBlog.author} added`)
-  }
 
-  const likeBlog = async (blog) => {
-    const likedBlog = { ...blog, likes: blog.likes + 1 }
-    const updatedBlog = await blogService.update(likedBlog)
-    setBlogs(blogs.map(b => b.id === blog.id ? updatedBlog : b))
-    notify(`Blog ${updatedBlog.title} by ${updatedBlog.author} liked!`)
-  }
-
-  const removeBlog = async (blog) => {
-    const removeConfirmation = window.confirm(`remove blog ${blog.title} by ${blog.author}?`)
-    if (removeConfirmation) {
-      const updatedBlog = await blogService.remove(blog) //if used in notify(), returns undefined
-      setBlogs(blogs.filter(b => b.id !== blog.id))
-      notify(`Blog ${blog.title} by ${blog.author} removed!`)
-    }
-  }
-
+  //to go into Login.js
   if (user === null) {
     return (
       <div>
@@ -104,9 +92,13 @@ const App = (props) => {
     )
   }
 
+  // console.log("props.blogs ", props)
+  console.log("props.blogs in App.js: ", props.blogs)
+
+  //to be moved to Blog.js
   const newBlogRef = React.createRef()
 
-  const byLikes = (b1, b2) => b2.likes - b1.likes
+  // const byLikes = (b1, b2) => b2.likes - b1.likes
 
   return (
     <div>
@@ -118,29 +110,41 @@ const App = (props) => {
       <button onClick={handleLogout}>Logout</button>
 
       <Togglable buttonLabel='create new' ref={newBlogRef}>
-        <NewBlog createBlog={createBlog} />
+        <NewBlog
+          createBlog={createBlog}
+          title={props.title}
+          author={props.author}
+          url={props.url} />
       </Togglable>
+      <BlogList
+        blogs={props.blogs}
+        creator={props.creator}
+        like={props.like}
+        remove={props.remove}
+      />
+      {/* <Blog/> */}
+      {/* {displayBlogs()} */}
 
-      {blogs.sort(byLikes).map(blog =>
-        <Blog
-          key={blog.id}
-          blog={blog}
-          like={likeBlog}
-          remove={removeBlog}
-          user={user}
-          creator={blog.user.username === user.username}
-        />
-      )}
+
     </div>
-  )
+  )}
+
+
+
+const mapStateToProps = state => {
+  console.log("mapStateToProps's State in App.js: ", state)
+  return {
+    blogs: state.blogs
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    initializeBlogs: () => dispatch(initializeBlogs()),
     setNotification: (message, type) => {
       dispatch(setNotification(message, type))
     },
   }
 }
 
-export default connect(null, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)
