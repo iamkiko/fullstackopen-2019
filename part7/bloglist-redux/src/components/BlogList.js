@@ -22,14 +22,14 @@ const BlogList = (props) => {
     // const blog = blogs.find(b => b.id === id)
     window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)
     try {
-      props.deleteBlog(blog.id)
-      props.setNotification({
+      deleteBlog(blog.id)
+      setNotification({
         message: `Blog ${blog.title} by ${blog.author} successfully removed!`,
         type: "blogMessage",
         timeout: 5000
       })
     } catch (exception) {
-      props.setNotification({
+      setNotification({
         message: `Error encountered: ${exception}`,
         type: "error",
         timeout: 5000
@@ -45,7 +45,7 @@ const BlogList = (props) => {
         like={() => likeBlog(blog)}
         remove={() => deleteBlogFromList(blog, blog.id)}
         user={blog.user}
-        creator={blog.user.username === blog.user.username}
+        loggedInUser={props.loggedInUser}
       />
     )
   }
@@ -70,12 +70,12 @@ const BlogList = (props) => {
   )
 }
 
-// const mapStateToProps = state => {
-//   console.log("mapStateToProps's State in Bloglist.js: ", state)
-//   return {
-//     blogs: state.blogs
-//   }
-// }
+const mapStateToProps = state => {
+  console.log("mapStateToProps's State in Bloglist.js: ", state)
+  return {
+    blogs: state.blogs
+  }
+}
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -87,4 +87,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(BlogList)
+export default connect(mapStateToProps, mapDispatchToProps)(BlogList)

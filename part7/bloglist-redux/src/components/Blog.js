@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, like, remove, creator }) => {
+const Blog = ({ blog, like, remove, loggedInUser }) => {
   const [expanded, setExpanded] = useState(false)
 
   const blogStyle = {
@@ -11,7 +11,8 @@ const Blog = ({ blog, like, remove, creator }) => {
     borderWidth: 1,
     marginBottom: 5
   }
-
+  console.log("logged in user's username: ", blog.user.username)
+  console.log("blog.user in blog.js: ", blog.user)
   console.log("blog in blog.js: ", blog)
   const details = () => (
     <div className='details'>
@@ -20,27 +21,20 @@ const Blog = ({ blog, like, remove, creator }) => {
         <button onClick={() => like(blog)}>like</button>
       </div>
       <div>added by {blog.user.name}</div>
-      {creator &&(<button onClick={() => remove(blog)}>remove </button>)}
+      {userCanDelete()}
+      {/* {user.username &&(<button onClick={() => remove(blog)}>remove </button>)} */}
     </div>
   )
 
-  // const addedBy = () => {
-  //   if(blog.user && blog.user.name) {
-  //     return (
-  //       <p>added by {blog.user.name}</p>
-  //     )
-  //   }
-  // }
-
-  // const userCanDelete = () => {
-  //   if(blog.user && creator === blog.user.id) {
-  //     return (
-  //       <div>
-  //         <button onClick{remove}>Delete</button>
-  //       </div>
-  //     )
-  //   }
-  // }
+  const userCanDelete = () => {
+    if(blog.user && loggedInUser === blog.user.username) {
+      return (
+        <div>
+          <button onClick={() => remove(blog)}>Delete</button>
+        </div>
+      )
+    }
+  }
   return (
     <div style={blogStyle}>
       <div onClick={() => setExpanded(!expanded)} className='name'>
@@ -50,18 +44,18 @@ const Blog = ({ blog, like, remove, creator }) => {
     </div>
   )}
 
-  const mapStateToProps = state => {
-    console.log("mapStateToProps's State in App.js: ", state)
-    return {
-      blogs: state.blogs
-    }
-  }
+  // const mapStateToProps = state => {
+  //   console.log("mapStateToProps's State in App.js: ", state)
+  //   return {
+  //     blogs: state.blogs
+  //   }
+  // }
 
 // Blog.propTypes = {
 //   blog: PropTypes.object.isRequired,
 //   like: PropTypes.func.isRequired,
 //   remove: PropTypes.func.isRequired,
-//   creator: PropTypes.bool.isRequired
+//   loggedInUser: PropTypes.bool.isRequired
 // }
 
 export default Blog

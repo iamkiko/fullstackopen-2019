@@ -36,7 +36,7 @@ const App = (props) => {
       blogService.setToken(user.token)
     }
   }, [])
-
+  console.log("user: ", user)
   //action
   const notify = (message, type = "success") => {
     props.setNotification({ message, type })
@@ -92,9 +92,6 @@ const App = (props) => {
     )
   }
 
-  // console.log("props.blogs ", props)
-  console.log("props.blogs in App.js: ", props.blogs)
-
   //to be moved to Blog.js
   const newBlogRef = React.createRef()
 
@@ -118,7 +115,7 @@ const App = (props) => {
       </Togglable>
       <BlogList
         blogs={props.blogs}
-        creator={props.creator}
+        loggedInUser={user.username}
         like={props.like}
         remove={props.remove}
       />
@@ -131,12 +128,12 @@ const App = (props) => {
 
 
 
-const mapStateToProps = state => {
-  console.log("mapStateToProps's State in App.js: ", state)
-  return {
-    blogs: state.blogs
-  }
-}
+// const mapStateToProps = state => {
+//   console.log("mapStateToProps's State in App.js: ", state)
+//   return {
+//     blogs: state.blogs
+//   }
+// }
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -147,4 +144,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(null, mapDispatchToProps)(App)
