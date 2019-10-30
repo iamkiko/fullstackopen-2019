@@ -11,9 +11,6 @@ const Blog = ({ blog, like, remove, loggedInUser }) => {
     borderWidth: 1,
     marginBottom: 5
   }
-  console.log("logged in user's username: ", blog.user.username)
-  console.log("blog.user in blog.js: ", blog.user)
-  console.log("blog in blog.js: ", blog)
   const details = () => (
     <div className='details'>
       <a href={blog.url}>{blog.url}</a>

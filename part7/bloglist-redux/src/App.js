@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react"
 import NewBlog from "./components/NewBlog"
 import blogService from "./services/blogs"
 import loginService from "./services/login"
-// import LoginForm from "./components/LoginForm"
 import Notification from "./components/Notification"
 import BlogList from "./components/BlogList"
 import Togglable from "./components/Togglable"
@@ -10,16 +9,13 @@ import { useField } from "./hooks"
 
 import { connect } from "react-redux"
 import { setNotification } from "./reducers/notificationReducer"
-import { initializeBlogs, likeBlog,
-  deleteBlog, createBlog } from "./reducers/blogReducer"
+import { initializeBlogs, likeBlog, createBlog } from "./reducers/blogReducer"
 
 const App = (props) => {
-
-  //React internal state
-  const username = useField("text")
-  const password = useField("password")
-
   const [user, setUser] = useState(null)
+  //React internal state
+  const  [username, resetUsername] = useField("text")
+  const  [password, resetPassword] = useField("password")
   // const [blogs, setBlogs] = useState([])
 
   const fetchBlogs = props.initializeBlogs
@@ -27,16 +23,20 @@ const App = (props) => {
     fetchBlogs()
   }, [fetchBlogs])
 
-  //action
+  //action for logged in
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser")
+    // console.log("loggedUserJSON :", loggedUserJSON )
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
+      // console.log("user in UseEffect: ", user)
       setUser(user)
       blogService.setToken(user.token)
     }
   }, [])
-  console.log("user: ", user)
+
+  // console.log("user: ", user)
+
   //action
   const notify = (message, type = "success") => {
     props.setNotification({ message, type })
@@ -47,11 +47,12 @@ const App = (props) => {
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
+     
       const user = await loginService.login({
         username: username.value,
         password: password.value
       })
-
+      // console.log(user)
       window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
@@ -128,21 +129,21 @@ const App = (props) => {
 
 
 
-// const mapStateToProps = state => {
-//   console.log("mapStateToProps's State in App.js: ", state)
-//   return {
-//     blogs: state.blogs
-//   }
-// }
+const mapStateToProps = state => {
+  return {
+    blogs: state.blogs
+  }
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
     initializeBlogs: () => dispatch(initializeBlogs()),
     likeBlog: (blog) => dispatch(likeBlog(blog)),
+    // deleteBlog: blogId => dispatch(deleteBlog(blogId)),
     setNotification: (message, type) => {
       dispatch(setNotification(message, type))
     },
   }
 }
 
-export default connect(null, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)

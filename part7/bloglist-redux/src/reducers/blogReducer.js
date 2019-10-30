@@ -8,7 +8,7 @@ export const ADD_LIKE = "ADD_LIKE"
 export const DELETE_BLOG = "DELETE_BLOG"
 //export const ADD_COMMENT = 'ADD_COMMENT'
 
-const sort = state => state.sort((a, b) => (a.likes < b.likes) ? 1 : -1)
+// const sort = state => state.sort((a, b) => b.likes - a.likes)
 //Action Creators
 
 export const initializeBlogs = () => {
@@ -33,18 +33,17 @@ export const createBlog = blog => {
 
 export const deleteBlog = blogId => {
   return async(dispatch) => {
-    const blogsAfterDeletion = await blogService.remove(blogId)
+    await blogService.remove(blogId)
     dispatch({
       type: DELETE_BLOG,
-      data: blogsAfterDeletion
+      data: blogId
     })
   }
 }
 
-export const likeBlog = blog => {
-  const likedBlog = { ...blog, likes: blog.likes + 1 }
-  const blogId = blog.id
-  console.log("blogID: ", blogId)
+export const likeBlog = blogObject => {
+  const likedBlog = { ...blogObject, likes: blogObject.likes + 1 }
+  const blogId = blogObject.id
   return async(dispatch) => {
     const updatedBlog = await blogService.update(blogId, likedBlog)
     dispatch({
@@ -56,19 +55,22 @@ export const likeBlog = blog => {
 
 //Reducer
 const blogReducer = (state = [], action) => {
-  console.log("reducer state", state)
   switch(action.type) {
-  case INITIALIZE_BLOGS:{
-    return sort(action.data)
-  }  
+  case INITIALIZE_BLOGS:
+    return action.data.sort((a, b) => b.likes - a.likes)
   case CREATE_BLOG:
-    return sort([...state, action.data])
-  case DELETE_BLOG:{
-    return state.filter(blog => blog.id !== action.data.id)
+    return [...state, action.data].sort((a, b) => b.likes - a.likes)
+  case DELETE_BLOG: {
+    console.log("action.data.id: ", action.data)
+    const specificBlog = action.data
+    return state.filter(blog => blog.id !== specificBlog)
+  // return action.data
   }
   case ADD_LIKE: {
     const specificBlog = action.data
-    return state.map(blog => blog.id !== specificBlog.id ? blog : specificBlog)
+    state = [...state]
+    //here it adds a like
+    return state.map(blog => blog.id !== specificBlog.id ? blog : specificBlog).sort((a, b) => b.likes - a.likes)
   }
   default:
     return state

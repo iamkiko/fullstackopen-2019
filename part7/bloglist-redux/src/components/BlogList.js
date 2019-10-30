@@ -10,6 +10,10 @@ import Blog from "./Blog"
 const BlogList = (props) => {
   const [expanded, setExpanded] = useState(false)
 
+  // const blogsCopy = [...props.blogs] 
+
+  // const sortedBlogs = blogsCopy.sort((a, b) => b.likes - a.likes)
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -19,17 +23,17 @@ const BlogList = (props) => {
   }
 
   const deleteBlogFromList = (blog) => {
-    // const blog = blogs.find(b => b.id === id)
+    // console.log("deleteBlogFromList's blog ID: ", blog.id)
     window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)
     try {
-      deleteBlog(blog.id)
-      setNotification({
+      props.deleteBlog(blog.id)
+      props.setNotification({
         message: `Blog ${blog.title} by ${blog.author} successfully removed!`,
         type: "blogMessage",
         timeout: 5000
       })
     } catch (exception) {
-      setNotification({
+      props.setNotification({
         message: `Error encountered: ${exception}`,
         type: "error",
         timeout: 5000
@@ -43,7 +47,7 @@ const BlogList = (props) => {
         key={blog.id}
         blog={blog}
         like={() => props.likeBlog(blog)}
-        remove={() => deleteBlogFromList(blog, blog.id)}
+        remove={() => deleteBlogFromList(blog)}
         user={blog.user}
         loggedInUser={props.loggedInUser}
       />
