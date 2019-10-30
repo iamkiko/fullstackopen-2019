@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import NewBlog from "./components/NewBlog"
-import blogService from "./services/blogs"
+// import blogService from "./services/blogs"
 import loginService from "./services/login"
 import Notification from "./components/Notification"
 import BlogList from "./components/BlogList"
@@ -9,10 +9,11 @@ import { useField } from "./hooks"
 
 import { connect } from "react-redux"
 import { setNotification } from "./reducers/notificationReducer"
-import { initializeBlogs, likeBlog, createBlog } from "./reducers/blogReducer"
+import { initializeBlogs, createBlog } from "./reducers/blogReducer"
+import { setUser, setToken, logout } from "./reducers/userReducer"
 
 const App = (props) => {
-  const [user, setUser] = useState(null)
+  // const [user, setUser] = useState(null)
   //React internal state
   const  [username, resetUsername] = useField("text")
   const  [password, resetPassword] = useField("password")
@@ -34,8 +35,8 @@ const App = (props) => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       // console.log("user in UseEffect: ", user)
-      setUser(user)
-      blogService.setToken(user.token)
+      props.setUser(user)
+      props.setToken(user.token)
     }
   }, [])
 
@@ -55,10 +56,11 @@ const App = (props) => {
         username: username.value,
         password: password.value
       })
-      // console.log(user)
+      console.log("handleLogin user: ", user)
       window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user))
-      blogService.setToken(user.token)
-      setUser(user)
+      props.setToken(user.token)
+      props.setUser(user)
+      // console.log("props.user.name: ", props.user.name)
       notify(`Welcome back ${user.name}`)
     } catch (exception) {
       notify("Wrong username or password", "error")
@@ -67,14 +69,14 @@ const App = (props) => {
 
   //logout component
   const handleLogout = () => {
-    setUser(null)
-    blogService.destroyToken()
+    props.logout()
+    // blogService.destroyToken()
     window.localStorage.removeItem("loggedBlogAppUser")
   }
 
 
   //to go into Login.js
-  if (user === null) {
+  if (props.username === "") {
     return (
       <div>
         <h2>Log in to application</h2>
@@ -107,25 +109,18 @@ const App = (props) => {
     const newBlogObject = {
       title: title.value,
       author: author.value,
-      url: url.value
+      url: url.value,
+      id: props.id
     }
     console.log("newBlogObject: ", newBlogObject)
     try {
       props.createBlog(newBlogObject)
-      props.setNotification({
-        message: `Blog ${newBlogObject.title} by ${newBlogObject.author} successfully added!`,
-        type: "blogMessage",
-        timeout: 5000
-      })
+      notify(`Blog ${newBlogObject.title} by ${newBlogObject.author} successfully added!`)
       titleReset()
       authorReset()
       urlReset()
     } catch (error) {
-      props.setNotification({
-        message: `Unable to add blog. Error: ${error}`,
-        type: "error",
-        timeout: 5000
-      })
+      notify(`Unable to add blog. Error: ${error}`)
     }
   }
 
@@ -135,7 +130,7 @@ const App = (props) => {
 
       <Notification  />
 
-      <p>{user.name} is logged in</p>
+      <p>{props.name} is logged in</p>
       <button onClick={handleLogout}>Logout</button>
 
       <Togglable buttonLabel='create new' ref={newBlogRef}>
@@ -147,7 +142,7 @@ const App = (props) => {
       </Togglable>
       <BlogList
         blogs={props.blogs}
-        loggedInUser={user.username}
+        loggedInUser={props.username}
         like={props.like}
         remove={props.remove}
       />
@@ -162,19 +157,24 @@ const App = (props) => {
 
 const mapStateToProps = state => {
   return {
-    blogs: state.blogs
+    blogs: state.blogs,
+    username: state.user.username,
+    name: state.user.name,
+    id: state.user.id,
+    token: state.user.token
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     initializeBlogs: () => dispatch(initializeBlogs()),
-    // likeBlog: (blog) => dispatch(likeBlog(blog)),
     createBlog: (blog) => dispatch(createBlog(blog)),
-    // deleteBlog: blogId => dispatch(deleteBlog(blogId)),
+    setUser: (user) => dispatch(setUser(user)),
+    setToken: (token) => dispatch(setToken(token)),
+    logout: () => dispatch(logout()),
     setNotification: (message, type) => {
       dispatch(setNotification(message, type))
-    },
+    }
   }
 }
 

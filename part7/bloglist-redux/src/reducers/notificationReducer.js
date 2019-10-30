@@ -1,6 +1,6 @@
 //action types
 const SET_NOTIFICATION = "SET_NOTIFICATION"
-const CLEAR_NOTIFICATION = "CLEAR_NOTIFICATION"
+// const CLEAR_NOTIFICATION = "CLEAR_NOTIFICATION"
 
 //action creators for notifications
 export const setNotification = ({ message, type }) => {
@@ -10,11 +10,11 @@ export const setNotification = ({ message, type }) => {
   }
 }
 
-export const clearNotification = () => {
-  return {
-    type: CLEAR_NOTIFICATION
-  }
-}
+// export const clearNotification = () => {
+//   return {
+//     type: CLEAR_NOTIFICATION
+//   }
+// }
 
 //notification reducer
 const notificationReducer = (state = [{ message: null, type: null }], action) => {
@@ -22,11 +22,11 @@ const notificationReducer = (state = [{ message: null, type: null }], action) =>
   case SET_NOTIFICATION:
     // console.log(action.data)
     return action.data
-  case CLEAR_NOTIFICATION:
-    return {
-      message: null,
-      type: null
-    }
+  // case CLEAR_NOTIFICATION:
+  //   return {
+  //     message: null,
+  //     type: null
+  //   }
   default:
     return state
   }

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 // import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import { likeBlog, deleteBlog
@@ -15,23 +15,19 @@ const BlogList = (props) => {
     borderWidth: 1,
     marginBottom: 5
   }
+  const notify = (message, type = "success") => {
+    props.setNotification({ message, type })
+    setTimeout(() => props.setNotification({ message: null, type: null  }), 10000)
+  }
 
   const deleteBlogFromList = (blog) => {
     // console.log("deleteBlogFromList's blog ID: ", blog.id)
     window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)
     try {
       props.deleteBlog(blog.id)
-      props.setNotification({
-        message: `Blog ${blog.title} by ${blog.author} successfully removed!`,
-        type: "blogMessage",
-        timeout: 5000
-      })
+      notify(`Blog ${blog.title} by ${blog.author} successfully removed!`)
     } catch (exception) {
-      props.setNotification({
-        message: `Error encountered: ${exception}`,
-        type: "error",
-        timeout: 5000
-      })
+      notify(`Error encountered: ${exception}`)
     }
   }
 
@@ -70,7 +66,8 @@ const BlogList = (props) => {
 
 const mapStateToProps = state => {
   return {
-    blogs: state.blogs
+    blogs: state.blogs,
+    id: state.user.id
   }
 }
 
