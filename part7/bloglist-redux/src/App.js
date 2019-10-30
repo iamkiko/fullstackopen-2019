@@ -16,6 +16,10 @@ const App = (props) => {
   //React internal state
   const  [username, resetUsername] = useField("text")
   const  [password, resetPassword] = useField("password")
+
+  const [title, titleReset] = useField("text")
+  const [author, authorReset] = useField("text")
+  const [url, urlReset] = useField("text")
   // const [blogs, setBlogs] = useState([])
 
   const fetchBlogs = props.initializeBlogs
@@ -47,7 +51,6 @@ const App = (props) => {
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-     
       const user = await loginService.login({
         username: username.value,
         password: password.value
@@ -94,9 +97,37 @@ const App = (props) => {
   }
 
   //to be moved to Blog.js
-  const newBlogRef = React.createRef()
 
+  const newBlogRef = React.createRef()
   // const byLikes = (b1, b2) => b2.likes - b1.likes
+
+  const addBlog = async event => {
+    event.preventDefault()
+    newBlogRef.current.toggleVisibility()
+    const newBlogObject = {
+      title: title.value,
+      author: author.value,
+      url: url.value
+    }
+    console.log("newBlogObject: ", newBlogObject)
+    try {
+      props.createBlog(newBlogObject)
+      props.setNotification({
+        message: `Blog ${newBlogObject.title} by ${newBlogObject.author} successfully added!`,
+        type: "blogMessage",
+        timeout: 5000
+      })
+      titleReset()
+      authorReset()
+      urlReset()
+    } catch (error) {
+      props.setNotification({
+        message: `Unable to add blog. Error: ${error}`,
+        type: "error",
+        timeout: 5000
+      })
+    }
+  }
 
   return (
     <div>
@@ -109,10 +140,10 @@ const App = (props) => {
 
       <Togglable buttonLabel='create new' ref={newBlogRef}>
         <NewBlog
-          createBlog={createBlog}
-          title={props.title}
-          author={props.author}
-          url={props.url} />
+          addBlog={addBlog}
+          title={title}
+          author={author}
+          url={url} />
       </Togglable>
       <BlogList
         blogs={props.blogs}
@@ -138,7 +169,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
   return {
     initializeBlogs: () => dispatch(initializeBlogs()),
-    likeBlog: (blog) => dispatch(likeBlog(blog)),
+    // likeBlog: (blog) => dispatch(likeBlog(blog)),
+    createBlog: (blog) => dispatch(createBlog(blog)),
     // deleteBlog: blogId => dispatch(deleteBlog(blogId)),
     setNotification: (message, type) => {
       dispatch(setNotification(message, type))

@@ -1,50 +1,22 @@
 import React from "react"
-import { connect } from "react-redux"
-import { useField } from "../hooks"
-import { setNotification } from "../reducers/notificationReducer"
-import { createBlog } from "../reducers/blogReducer"
+// import { connect } from "react-redux"
+// import { setNotification } from "../reducers/notificationReducer"
+// import { createBlog } from "../reducers/blogReducer"
 
 const NewBlog = ({
-  setNotification,
-  createBlog,
+  author,
+  title,
+  url,
+  addBlog,
   newBlogRef
 }) => {
-  const [title, titleReset] = useField("text")
-  const [author, authorReset] = useField("text")
-  const [url, urlReset] = useField("text")
 
-  const handleSubmit = async event => {
-    event.preventDefault()
-    newBlogRef.current.toggleVisibility()
-    const newBlogObject = {
-      title: title.value,
-      author: author.value,
-      url: url.value
-    }
-    try {
-      createBlog(newBlogObject)
-      titleReset()
-      authorReset()
-      urlReset()
-      setNotification({
-        message: `Blog ${newBlogObject.title} by ${newBlogObject.author} successfully added!`,
-        type: "blogMessage",
-        timeout: 5000
-      })
-    } catch (error) {
-      setNotification({
-        message: `Unable to add blog. Error: ${error}`,
-        type: "error",
-        timeout: 5000
-      })
-    }
-  }
 
   return (
     <div>
       <h2>create new</h2>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={addBlog} ref={newBlogRef}>
         <div>
           title:
           <input {...title} />
@@ -63,14 +35,4 @@ const NewBlog = ({
   )
 }
 
-const mapDispatchToProps = {
-  createBlog,
-  setNotification
-}
-
-const ConnectedNewBlog = connect(
-  null,
-  mapDispatchToProps
-)(NewBlog)
-
-export default ConnectedNewBlog
+export default NewBlog

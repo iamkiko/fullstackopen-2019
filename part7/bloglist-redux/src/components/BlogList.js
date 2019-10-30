@@ -8,12 +8,6 @@ import { setNotification } from "../reducers/notificationReducer"
 import Blog from "./Blog"
 
 const BlogList = (props) => {
-  const [expanded, setExpanded] = useState(false)
-
-  // const blogsCopy = [...props.blogs] 
-
-  // const sortedBlogs = blogsCopy.sort((a, b) => b.likes - a.likes)
-
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -75,7 +69,6 @@ const BlogList = (props) => {
 }
 
 const mapStateToProps = state => {
-  console.log("mapStateToProps's State in Bloglist.js: ", state)
   return {
     blogs: state.blogs
   }
