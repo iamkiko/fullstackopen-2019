@@ -186,7 +186,6 @@ const mapStateToProps = state => {
   return {
     blogs: state.blogs,
     users: state.users,
-    // login: state.login
     username: state.login.username,
     name: state.login.name,
     id: state.login.id
