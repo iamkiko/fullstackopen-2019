@@ -3,19 +3,23 @@ import PropTypes from "prop-types"
 
 const User = ({ user }) => {
   console.log("User.js details function's prop.user: ", user)
-  //need to map through user and put
-  // const details = () => {
-  //   return user.map(user => (
-  //     <tr key={user.id}>
-  //       <td>{user.name}</td>
-  //       <td>{user.blogs}</td>
-  //     </tr>
-  //   ))
-  // }
+  //conditional to check if user exists?
 
-  // return <tbody>{details()}</tbody>
+  if (user === undefined || !user) {
+    return null
+  }
 
-  return <div>{user.name}</div>
+  return (
+    <div>
+      <h2>{user.name}</h2>
+      <h3>added blogs:</h3>
+      <ul>
+        {user.blogs.map(blog => (
+          <li key={blog.id}>{blog.title}</li>
+        ))}
+      </ul>
+    </div>
+  )
 }
 
 User.propTypes = {

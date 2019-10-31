@@ -1,14 +1,16 @@
 import React from "react"
 import { connect } from "react-redux"
-// import userReducer from "../reducers/userReducer"
-import User from "./User"
+import { Link } from "react-router-dom"
+// import User from "./User"
 
 const UserList = props => {
   console.log("userlist's props.users: ", props.users)
   const displayUsers = () => {
     return props.users.map(user => (
       <tr key={user.id}>
-        <td>{user.name}</td>
+        <td>
+          <Link to={`users/${user.id}`}>{user.name}</Link>
+        </td>
         <td>{user.blogs.length}</td>
       </tr>
     ))

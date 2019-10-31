@@ -9,6 +9,8 @@ import BlogList from "./components/BlogList"
 import Togglable from "./components/Togglable"
 import NewBlog from "./components/NewBlog"
 import UserList from "./components/UserList"
+import User from "./components/User"
+
 import { useField } from "./hooks"
 
 import { setNotification } from "./reducers/notificationReducer"
@@ -50,13 +52,15 @@ const App = props => {
     }
   }, [])
 
-  //action
+  //ACTIONS/FUNCTIONS
+
+  //setNotification function
   const notify = (message, type = "success") => {
     props.setNotification({ message, type })
     setTimeout(() => props.setNotification({ message: null, type: null }), 5000)
   }
 
-  //login component
+  //login logic
   const handleLogin = async event => {
     event.preventDefault()
     try {
@@ -73,7 +77,7 @@ const App = props => {
     }
   }
 
-  //logout component
+  //logout logic
   const handleLogout = () => {
     props.logout()
     // blogService.destroyToken()
@@ -105,6 +109,10 @@ const App = props => {
       notify(`Unable to add blog. Error: ${error}`)
     }
   }
+
+  //finding specific user to show their page
+  console.log("props.users in App.js: ", props)
+  const specificUser = id => props.users.find(user => user.id === id)
 
   const loginPage = () => (
     <div>
@@ -164,7 +172,11 @@ const App = props => {
           {/* <Blog/> */}
           {/* {displayBlogs()} */}
         </div>
-        <Route path="/users" render={() => <UserList />} />
+        <Route exact path="/users" render={() => <UserList />} />
+        <Route
+          path="/users/:id"
+          render={({ match }) => <User user={specificUser(match.params.id)} />}
+        />
       </Router>
     </div>
   )
@@ -173,6 +185,8 @@ const App = props => {
 const mapStateToProps = state => {
   return {
     blogs: state.blogs,
+    users: state.users,
+    // login: state.login
     username: state.login.username,
     name: state.login.name,
     id: state.login.id
