@@ -1,7 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
 
-const Notification = ({  message, type }) => {
+const Notification = ({ message, type }) => {
   if (message === undefined || !message) {
     return null
   }
@@ -13,22 +13,18 @@ const Notification = ({  message, type }) => {
     borderStyle: "solid",
     borderRadius: 5,
     padding: 10,
-    marginBottom: 10,
+    marginBottom: 10
   }
 
   let displayStyle = null
   type === "error"
-    ? displayStyle = { ...notificationStyle, color: "red" }
-    : displayStyle = { ...notificationStyle, color: "green" }
+    ? (displayStyle = { ...notificationStyle, color: "red" })
+    : (displayStyle = { ...notificationStyle, color: "green" })
 
-  return (
-    <div style={displayStyle}>
-      {message}
-    </div>
-  )
+  return <div style={displayStyle}>{message}</div>
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     message: state.notification.message,
     type: state.notification.type

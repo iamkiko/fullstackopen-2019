@@ -1,17 +1,6 @@
 import React from "react"
-// import { connect } from "react-redux"
-// import { setNotification } from "../reducers/notificationReducer"
-// import { createBlog } from "../reducers/blogReducer"
 
-const NewBlog = ({
-  author,
-  title,
-  url,
-  addBlog,
-  newBlogRef
-}) => {
-
-
+const NewBlog = ({ author, title, url, addBlog, newBlogRef }) => {
   return (
     <div>
       <h2>create new</h2>
@@ -29,7 +18,7 @@ const NewBlog = ({
           url:
           <input {...url} />
         </div>
-        <button type='submit'>create</button>
+        <button type="submit">create</button>
       </form>
     </div>
   )

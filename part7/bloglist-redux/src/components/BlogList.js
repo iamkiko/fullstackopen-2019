@@ -1,13 +1,11 @@
 import React from "react"
 // import PropTypes from "prop-types"
 import { connect } from "react-redux"
-import { likeBlog, deleteBlog
-  //initializeBlogs
-} from "../reducers/blogReducer"
+import { likeBlog, deleteBlog } from "../reducers/blogReducer"
 import { setNotification } from "../reducers/notificationReducer"
 import Blog from "./Blog"
 
-const BlogList = (props) => {
+const BlogList = props => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -17,11 +15,13 @@ const BlogList = (props) => {
   }
   const notify = (message, type = "success") => {
     props.setNotification({ message, type })
-    setTimeout(() => props.setNotification({ message: null, type: null  }), 10000)
+    setTimeout(
+      () => props.setNotification({ message: null, type: null }),
+      10000
+    )
   }
 
-  const deleteBlogFromList = (blog) => {
-    // console.log("deleteBlogFromList's blog ID: ", blog.id)
+  const deleteBlogFromList = blog => {
     window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)
     try {
       props.deleteBlog(blog.id)
@@ -32,7 +32,7 @@ const BlogList = (props) => {
   }
 
   const displayBlogs = () => {
-    return props.blogs.map(blog =>
+    return props.blogs.map(blog => (
       <Blog
         key={blog.id}
         blog={blog}
@@ -41,27 +41,10 @@ const BlogList = (props) => {
         user={blog.user}
         loggedInUser={props.loggedInUser}
       />
-    )
+    ))
   }
 
-
-  return (
-    <div style={blogStyle}>
-      {/* {props.blogs.map(blog =>
-        <div key={blog.id}>
-          <div onClick={() => setExpanded(!expanded)} className='name'>
-            {blog.title} {blog.author}
-          </div>
-          <a href={blog.url}>{blog.url}</a>
-          <div>{blog.likes} likes
-            <button onClick={addLikeToBlog}>like</button>
-          </div>
-          <div>added by {blog.user.name}</div>
-        </div>
-      )} */}
-      {displayBlogs()}
-    </div>
-  )
+  return <div style={blogStyle}>{displayBlogs()}</div>
 }
 
 const mapStateToProps = state => {
@@ -81,4 +64,7 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BlogList)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BlogList)

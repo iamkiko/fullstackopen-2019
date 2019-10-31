@@ -17,20 +17,22 @@ export const setNotification = ({ message, type }) => {
 // }
 
 //notification reducer
-const notificationReducer = (state = [{ message: null, type: null }], action) => {
-  switch(action.type) {
-  case SET_NOTIFICATION:
-    // console.log(action.data)
-    return action.data
-  // case CLEAR_NOTIFICATION:
-  //   return {
-  //     message: null,
-  //     type: null
-  //   }
-  default:
-    return state
+const notificationReducer = (
+  state = [{ message: null, type: null }],
+  action
+) => {
+  switch (action.type) {
+    case SET_NOTIFICATION:
+      // console.log(action.data)
+      return action.data
+    // case CLEAR_NOTIFICATION:
+    //   return {
+    //     message: null,
+    //     type: null
+    //   }
+    default:
+      return state
   }
 }
-
 
 export default notificationReducer

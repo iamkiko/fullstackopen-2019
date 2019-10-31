@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState } from "react"
+// import PropTypes from 'prop-types'
 
 const Blog = ({ blog, like, remove, loggedInUser }) => {
   const [expanded, setExpanded] = useState(false)
@@ -7,24 +7,24 @@ const Blog = ({ blog, like, remove, loggedInUser }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: 'solid',
+    border: "solid",
     borderWidth: 1,
     marginBottom: 5
   }
   const details = () => (
-    <div className='details'>
+    <div className="details">
       <a href={blog.url}>{blog.url}</a>
-      <div>{blog.likes} likes
+      <div>
+        {blog.likes} likes
         <button onClick={() => like(blog)}>like</button>
       </div>
       <div>added by {blog.user.name}</div>
       {userCanDelete()}
-      {/* {user.username &&(<button onClick={() => remove(blog)}>remove </button>)} */}
     </div>
   )
 
   const userCanDelete = () => {
-    if(blog.user && loggedInUser === blog.user.username) {
+    if (blog.user && loggedInUser === blog.user.username) {
       return (
         <div>
           <button onClick={() => remove(blog)}>Delete</button>
@@ -34,19 +34,20 @@ const Blog = ({ blog, like, remove, loggedInUser }) => {
   }
   return (
     <div style={blogStyle}>
-      <div onClick={() => setExpanded(!expanded)} className='name'>
+      <div onClick={() => setExpanded(!expanded)} className="name">
         {blog.title} {blog.author}
       </div>
       {expanded && details()}
     </div>
-  )}
+  )
+}
 
-  // const mapStateToProps = state => {
-  //   console.log("mapStateToProps's State in App.js: ", state)
-  //   return {
-  //     blogs: state.blogs
-  //   }
-  // }
+// const mapStateToProps = state => {
+//   console.log("mapStateToProps's State in App.js: ", state)
+//   return {
+//     blogs: state.blogs
+//   }
+// }
 
 // Blog.propTypes = {
 //   blog: PropTypes.object.isRequired,

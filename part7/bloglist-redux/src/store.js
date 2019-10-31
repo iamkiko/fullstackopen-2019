@@ -12,10 +12,12 @@ const reducer = combineReducers({
   user: userReducer
 })
 
-const store = createStore(reducer, composeWithDevTools(
-  applyMiddleware(thunk, logger),
-  // other store enhancers if any
-))
-
+const store = createStore(
+  reducer,
+  composeWithDevTools(
+    applyMiddleware(thunk, logger)
+    // other store enhancers if any
+  )
+)
 
 export default store
