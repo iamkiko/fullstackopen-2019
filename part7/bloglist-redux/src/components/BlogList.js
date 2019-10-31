@@ -50,7 +50,7 @@ const BlogList = props => {
 const mapStateToProps = state => {
   return {
     blogs: state.blogs,
-    id: state.user.id
+    id: state.login.id
   }
 }
 

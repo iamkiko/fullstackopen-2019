@@ -1,16 +1,20 @@
 import React, { useEffect } from "react"
-import NewBlog from "./components/NewBlog"
-// import blogService from "./services/blogs"
+import { connect } from "react-redux"
+import { BrowserRouter as Router, Route } from "react-router-dom"
+
 import loginService from "./services/login"
+
 import Notification from "./components/Notification"
 import BlogList from "./components/BlogList"
 import Togglable from "./components/Togglable"
+import NewBlog from "./components/NewBlog"
+import UserList from "./components/UserList"
 import { useField } from "./hooks"
 
-import { connect } from "react-redux"
 import { setNotification } from "./reducers/notificationReducer"
 import { initializeBlogs, createBlog } from "./reducers/blogReducer"
-import { setUser, setToken, logout } from "./reducers/userReducer"
+import { setUser, setToken, logout } from "./reducers/loginReducer"
+import { initializeUsers } from "./reducers/userReducer"
 
 const App = props => {
   // const [user, setUser] = useState(null)
@@ -23,10 +27,18 @@ const App = props => {
   const [url, urlReset] = useField("text")
   // const [blogs, setBlogs] = useState([])
 
-  const fetchBlogs = props.initializeBlogs
+  const getBlogs = props.initializeBlogs
+  const getUsers = props.initializeUsers
+
+  //getting blogs
   useEffect(() => {
-    fetchBlogs()
-  }, [fetchBlogs])
+    getBlogs()
+  }, [getBlogs])
+
+  //getting users
+  useEffect(() => {
+    getUsers()
+  }, [getUsers])
 
   //action for logged in
   useEffect(() => {
@@ -68,31 +80,7 @@ const App = props => {
     window.localStorage.removeItem("loggedBlogAppUser")
   }
 
-  //to go into Login.js
-  if (props.username === "") {
-    return (
-      <div>
-        <h2>Log in to application</h2>
-
-        <Notification />
-
-        <form onSubmit={handleLogin}>
-          <div>
-            Username
-            <input {...username} />
-          </div>
-          <div>
-            Password
-            <input {...password} />
-          </div>
-          <button type="submit">Submit</button>
-        </form>
-      </div>
-    )
-  }
-
-  //to be moved to Blog.js
-
+  // adding a new blog
   const newBlogRef = React.createRef()
 
   const addBlog = async event => {
@@ -118,24 +106,66 @@ const App = props => {
     }
   }
 
+  const loginPage = () => (
+    <div>
+      <h2>Log in to application</h2>
+
+      <Notification />
+
+      <form onSubmit={handleLogin}>
+        <div>
+          Username
+          <input {...username} />
+        </div>
+        <div>
+          Password
+          <input {...password} />
+        </div>
+        <button type="submit">Log me in!</button>
+      </form>
+    </div>
+  )
+
+  //to go into Login.js
+  if (props.username === "") {
+    return loginPage()
+  }
+
   return (
     <div>
       <h2>Blogs</h2>
       <Notification />
-      <p>{props.name} is logged in</p>
-      <button onClick={handleLogout}>Logout</button>
-
-      <Togglable buttonLabel="create new" ref={newBlogRef}>
-        <NewBlog addBlog={addBlog} title={title} author={author} url={url} />
-      </Togglable>
-      <BlogList
-        blogs={props.blogs}
-        loggedInUser={props.username}
-        like={props.like}
-        remove={props.remove}
-      />
-      {/* <Blog/> */}
-      {/* {displayBlogs()} */}
+      <Router>
+        <div>
+          <p>{props.name} is logged in</p>
+          <button onClick={handleLogout}>Log me out!</button>
+          <Route
+            exact
+            path="/"
+            render={() => (
+              <div>
+                <Togglable buttonLabel="create new" ref={newBlogRef}>
+                  <NewBlog
+                    addBlog={addBlog}
+                    title={title}
+                    author={author}
+                    url={url}
+                  />
+                </Togglable>
+                <BlogList
+                  blogs={props.blogs}
+                  loggedInUser={props.username}
+                  like={props.like}
+                  remove={props.remove}
+                />
+              </div>
+            )}
+          />
+          {/* <Blog/> */}
+          {/* {displayBlogs()} */}
+        </div>
+        <Route path="/users" render={() => <UserList />} />
+      </Router>
     </div>
   )
 }
@@ -143,9 +173,9 @@ const App = props => {
 const mapStateToProps = state => {
   return {
     blogs: state.blogs,
-    username: state.user.username,
-    name: state.user.name,
-    id: state.user.id
+    username: state.login.username,
+    name: state.login.name,
+    id: state.login.id
   }
 }
 
@@ -153,6 +183,7 @@ const mapDispatchToProps = dispatch => {
   return {
     initializeBlogs: () => dispatch(initializeBlogs()),
     createBlog: blog => dispatch(createBlog(blog)),
+    initializeUsers: () => dispatch(initializeUsers()),
     setUser: user => dispatch(setUser(user)),
     setToken: token => dispatch(setToken(token)),
     logout: () => dispatch(logout()),

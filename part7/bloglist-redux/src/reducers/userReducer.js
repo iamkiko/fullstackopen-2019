@@ -1,53 +1,24 @@
-// import userService from "../services/users"
-import blogService from "../services/blogs"
+import userService from "../services/users"
 
-const SET_USER = "SET_USER"
-const SET_TOKEN = "SET_TOKEN"
-const LOGOUT = "LOGOUT"
+const INITIALIZE_USERS = "INITIALIZE_USERS"
 
-const initialState = {
-  username: "",
-  name: "",
-  id: ""
-}
-
-export const setUser = user => {
-  return {
-    type: SET_USER,
-    data: user
-  }
-}
-
-export const setToken = token => {
-  return async(dispatch) => {
-    await blogService.setToken(token)
+export const initializeUsers = () => {
+  return async dispatch => {
+    const userData = await userService.getAll()
+    console.log("userData from reducer: ", userData)
     dispatch({
-      type: SET_TOKEN
+      type: INITIALIZE_USERS,
+      data: userData
     })
   }
 }
 
-export const logout = () => {
-  return {
-    type: LOGOUT
-  }
-}
-
-const userReducer = (state = initialState, action) => {
-  switch(action.type) {
-  case SET_USER:
-    return {
-      ...state,
-      username: action.data.username,
-      name: action.data.name,
-      id: action.data.id,
-      token: action.data.token
-    }
-  case SET_TOKEN:
-    return state
-  case LOGOUT:
-    return initialState
-  default: return state
+const userReducer = (state = [], action) => {
+  switch (action.type) {
+    case INITIALIZE_USERS:
+      return action.data
+    default:
+      return state
   }
 }
 
