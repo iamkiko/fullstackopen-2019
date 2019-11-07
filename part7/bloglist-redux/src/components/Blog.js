@@ -1,53 +1,76 @@
-import React, { useState } from "react"
+import React from "react"
+import { connect } from "react-redux"
+import { likeBlog, deleteBlog } from "../reducers/blogReducer"
+import { setNotification } from "../reducers/notificationReducer"
 // import PropTypes from 'prop-types'
 
-const Blog = ({ blog, like, remove, loggedInUser }) => {
-  const [expanded, setExpanded] = useState(false)
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: "solid",
-    borderWidth: 1,
-    marginBottom: 5
+const Blog = props => {
+  const blog = props.blog
+  if (blog === undefined || !blog) {
+    return null
   }
+
+  const notify = (message, type = "success") => {
+    props.setNotification({ message, type })
+    setTimeout(
+      () => props.setNotification({ message: null, type: null }),
+      10000
+    )
+  }
+
+  const deleteBlogFromList = blog => {
+    window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)
+    try {
+      props.deleteBlog(blog.id)
+      notify(`Blog ${blog.title} by ${blog.author} successfully removed!`)
+    } catch (exception) {
+      notify(`Error encountered: ${exception}`)
+    }
+  }
+
   const details = () => (
     <div className="details">
+      <h2>
+        {blog.title} by {blog.author}
+      </h2>
       <a href={blog.url}>{blog.url}</a>
       <div>
         {blog.likes} likes
-        <button onClick={() => like(blog)}>like</button>
+        <button onClick={() => props.likeBlog(blog)}>like</button>
       </div>
       <div>added by {blog.user.name}</div>
-      {userCanDelete()}
+      <div>{userCanDelete()}</div>
     </div>
   )
 
   const userCanDelete = () => {
-    if (blog.user && loggedInUser === blog.user.username) {
+    if (blog.user && props.loggedId === blog.user.id) {
       return (
         <div>
-          <button onClick={() => remove(blog)}>Delete</button>
+          <button onClick={() => deleteBlogFromList(blog)}>Delete</button>
         </div>
       )
     }
   }
-  return (
-    <div style={blogStyle}>
-      <div onClick={() => setExpanded(!expanded)} className="name">
-        {blog.title} {blog.author}
-      </div>
-      {expanded && details()}
-    </div>
-  )
+
+  return <div>{details()}</div>
 }
 
-// const mapStateToProps = state => {
-//   console.log("mapStateToProps's State in App.js: ", state)
-//   return {
-//     blogs: state.blogs
-//   }
-// }
+const mapStateToProps = state => {
+  return {
+    loggedId: state.login.id //need to get this to compare if user is user
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    likeBlog: blog => dispatch(likeBlog(blog)),
+    deleteBlog: blogId => dispatch(deleteBlog(blogId)),
+    setNotification: (message, type) => {
+      dispatch(setNotification(message, type))
+    }
+  }
+}
 
 // Blog.propTypes = {
 //   blog: PropTypes.object.isRequired,
@@ -56,4 +79,7 @@ const Blog = ({ blog, like, remove, loggedInUser }) => {
 //   loggedInUser: PropTypes.bool.isRequired
 // }
 
-export default Blog
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Blog)

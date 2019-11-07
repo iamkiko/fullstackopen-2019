@@ -6,6 +6,7 @@ import loginService from "./services/login"
 
 import Notification from "./components/Notification"
 import BlogList from "./components/BlogList"
+import Blog from "./components/Blog"
 import Togglable from "./components/Togglable"
 import NewBlog from "./components/NewBlog"
 import UserList from "./components/UserList"
@@ -47,6 +48,7 @@ const App = props => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser")
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
+      console.log("App.js - user object: ", user)
       props.setUser(user)
       props.setToken(user.token)
     }
@@ -111,8 +113,10 @@ const App = props => {
   }
 
   //finding specific user to show their page
-  console.log("props.users in App.js: ", props)
+  // console.log("props.users in App.js: ", props)
   const specificUser = id => props.users.find(user => user.id === id)
+
+  const specificBlog = id => props.blogs.find(blog => blog.id === id)
 
   const loginPage = () => (
     <div>
@@ -176,6 +180,10 @@ const App = props => {
         <Route
           path="/users/:id"
           render={({ match }) => <User user={specificUser(match.params.id)} />}
+        />
+        <Route
+          path="/blogs/:id"
+          render={({ match }) => <Blog blog={specificBlog(match.params.id)} />}
         />
       </Router>
     </div>

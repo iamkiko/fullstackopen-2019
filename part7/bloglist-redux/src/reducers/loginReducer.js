@@ -34,6 +34,7 @@ export const logout = () => {
 }
 
 const loginReducer = (state = initialState, action) => {
+  console.log("action.data in loginReducer: ", action.data)
   switch (action.type) {
     case SET_USER:
       return {

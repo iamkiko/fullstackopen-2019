@@ -5,7 +5,6 @@ const INITIALIZE_USERS = "INITIALIZE_USERS"
 export const initializeUsers = () => {
   return async dispatch => {
     const userData = await userService.getAll()
-    console.log("userData from reducer: ", userData)
     dispatch({
       type: INITIALIZE_USERS,
       data: userData
