@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom"
 import loginService from "./services/login"
 
 import Notification from "./components/Notification"
+import Navigation from "./components/Navigation"
 import BlogList from "./components/BlogList"
 import Blog from "./components/Blog"
 import Togglable from "./components/Togglable"
@@ -16,7 +17,7 @@ import { useField } from "./hooks"
 
 import { setNotification } from "./reducers/notificationReducer"
 import { initializeBlogs, createBlog } from "./reducers/blogReducer"
-import { setUser, setToken, logout } from "./reducers/loginReducer"
+import { setUser, setToken } from "./reducers/loginReducer"
 import { initializeUsers } from "./reducers/userReducer"
 
 const App = props => {
@@ -80,11 +81,11 @@ const App = props => {
   }
 
   //logout logic
-  const handleLogout = () => {
-    props.logout()
-    // blogService.destroyToken()
-    window.localStorage.removeItem("loggedBlogAppUser")
-  }
+  // const handleLogout = () => {
+  //   props.logout()
+  //   // blogService.destroyToken()
+  //   window.localStorage.removeItem("loggedBlogAppUser")
+  // }
 
   // adding a new blog
   const newBlogRef = React.createRef()
@@ -145,12 +146,12 @@ const App = props => {
 
   return (
     <div>
-      <h2>Blogs</h2>
-      <Notification />
       <Router>
+        <Navigation />
+        <Notification />
+        <h2>Blogs</h2>
+
         <div>
-          <p>{props.name} is logged in</p>
-          <button onClick={handleLogout}>Log me out!</button>
           <Route
             exact
             path="/"
@@ -207,7 +208,6 @@ const mapDispatchToProps = dispatch => {
     initializeUsers: () => dispatch(initializeUsers()),
     setUser: user => dispatch(setUser(user)),
     setToken: token => dispatch(setToken(token)),
-    logout: () => dispatch(logout()),
     setNotification: (message, type) => {
       dispatch(setNotification(message, type))
     }
