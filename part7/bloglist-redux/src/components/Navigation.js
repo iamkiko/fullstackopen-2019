@@ -17,7 +17,7 @@ const Navigation = props => {
 
   return (
     <div style={navStyle}>
-      <Link to="/">Blogs</Link> <Link to="/">Users</Link>{" "}
+      <Link to="/">Blogs</Link> <Link to="/Users">Users</Link>{" "}
       {props.currentUser && (
         <span>
           {props.currentUser.name} logged in{" "}
