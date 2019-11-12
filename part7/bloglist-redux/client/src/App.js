@@ -20,8 +20,22 @@ import { initializeBlogs, createBlog } from "./reducers/blogReducer"
 import { setUser, setToken } from "./reducers/loginReducer"
 import { initializeUsers } from "./reducers/userReducer"
 
+import Typography from "@material-ui/core/Typography"
+import { makeStyles } from "@material-ui/core/styles"
+import Button from "@material-ui/core/Button"
+
+const useStyles = makeStyles(theme => ({
+  button: {
+    margin: theme.spacing(1)
+  },
+  input: {
+    display: "none"
+  }
+}))
+
 const App = props => {
-  // const [user, setUser] = useState(null)
+  const classes = useStyles()
+
   //React internal state
   const [username, usernameReset] = useField("text")
   const [password, passwordReset] = useField("password")
@@ -119,20 +133,32 @@ const App = props => {
 
   const loginPage = () => (
     <div>
-      <h2>Log in to application</h2>
+      <Typography variant="h4" gutterBottom>
+        Log in to application
+      </Typography>
 
       <Notification />
 
       <form onSubmit={handleLogin}>
-        <div>
-          Username
-          <input {...username} />
-        </div>
-        <div>
-          Password
-          <input {...password} />
-        </div>
-        <button type="submit">Log me in!</button>
+        <Typography variant="subtitle1" gutterBottom>
+          <div>
+            Username
+            <input {...username} />
+          </div>
+          <div>
+            Password
+            <input {...password} />
+          </div>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            size="small"
+            type="submit"
+          >
+            Log me in!
+          </Button>
+        </Typography>
       </form>
     </div>
   )
@@ -147,7 +173,9 @@ const App = props => {
       <Router>
         <Navigation />
         <Notification />
-        <h2>Blogs</h2>
+        <Typography variant="h3" gutterBottom>
+          Blogs
+        </Typography>
 
         <div>
           <Route

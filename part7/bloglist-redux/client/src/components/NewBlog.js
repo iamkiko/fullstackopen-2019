@@ -1,24 +1,51 @@
 import React from "react"
+import Typography from "@material-ui/core/Typography"
+import Button from "@material-ui/core/Button"
+import { makeStyles } from "@material-ui/core/styles"
+
+const useStyles = makeStyles(theme => ({
+  button: {
+    margin: theme.spacing(1)
+  },
+  input: {
+    display: "none"
+  }
+}))
 
 const NewBlog = ({ author, title, url, addBlog, newBlogRef }) => {
+  const classes = useStyles()
+
   return (
     <div>
-      <h2>create new</h2>
+      <Typography variant="h4" gutterBottom>
+        {" "}
+        Create New Blog{" "}
+      </Typography>
 
       <form onSubmit={addBlog} ref={newBlogRef}>
-        <div>
-          title:
-          <input {...title} />
-        </div>
-        <div>
-          author:
-          <input {...author} />
-        </div>
-        <div>
-          url:
-          <input {...url} />
-        </div>
-        <button type="submit">create</button>
+        <Typography gutterBottom>
+          <div>
+            Title:
+            <input {...title} />
+          </div>
+          <div>
+            Author:
+            <input {...author} />
+          </div>
+          <div>
+            URL:
+            <input {...url} />
+          </div>
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            className={classes.button}
+            type="submit"
+          >
+            Create
+          </Button>
+        </Typography>
       </form>
     </div>
   )

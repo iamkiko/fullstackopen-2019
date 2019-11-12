@@ -2,10 +2,21 @@ import React from "react"
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
 import { logout } from "../reducers/loginReducer"
+import Typography from "@material-ui/core/Typography"
+import Button from "@material-ui/core/Button"
+import { makeStyles } from "@material-ui/core/styles"
+
+const useStyles = makeStyles(theme => ({
+  button: {
+    margin: theme.spacing(1)
+  }
+}))
 
 const Navigation = props => {
+  const classes = useStyles()
+
   const navStyle = {
-    backgroundColor: "#DCDCDC",
+    backgroundColor: "#F8F8F8",
     padding: ".5rem"
   }
 
@@ -17,13 +28,24 @@ const Navigation = props => {
 
   return (
     <div style={navStyle}>
-      <Link to="/">Blogs</Link> <Link to="/Users">Users</Link>{" "}
-      {props.currentUser && (
-        <span>
-          {props.currentUser.name} logged in{" "}
-          <button onClick={handleLogout}>Log out</button>
-        </span>
-      )}
+      <Typography>
+        <Link to="/">Blogs</Link> <Link to="/Users">Users</Link>
+        {" - "}
+        {props.currentUser && (
+          <span>
+            {props.currentUser.name} logged in{" "}
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+              size="small"
+              onClick={handleLogout}
+            >
+              Log out
+            </Button>
+          </span>
+        )}
+      </Typography>
     </div>
   )
 }
