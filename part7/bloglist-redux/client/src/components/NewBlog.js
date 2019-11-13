@@ -1,15 +1,17 @@
 import React from "react"
+import PropTypes from "prop-types"
+
 import Typography from "@material-ui/core/Typography"
 import Button from "@material-ui/core/Button"
 import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles(theme => ({
   button: {
-    margin: theme.spacing(1)
+    margin: theme.spacing(1),
   },
   input: {
-    display: "none"
-  }
+    display: "none",
+  },
 }))
 
 const NewBlog = ({ author, title, url, addBlog, newBlogRef }) => {
@@ -49,6 +51,11 @@ const NewBlog = ({ author, title, url, addBlog, newBlogRef }) => {
       </form>
     </div>
   )
+}
+
+NewBlog.propTypes = {
+  NewBlogRef: PropTypes.object.isRequired,
+  addBlog: PropTypes.func.isRequired,
 }
 
 export default NewBlog

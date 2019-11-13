@@ -1,5 +1,6 @@
 import React from "react"
 import { connect } from "react-redux"
+import PropTypes from "prop-types"
 
 const Notification = ({ message, type }) => {
   if (message === undefined || !message) {
@@ -13,7 +14,7 @@ const Notification = ({ message, type }) => {
     borderStyle: "solid",
     borderRadius: 5,
     padding: 10,
-    marginBottom: 10
+    marginBottom: 10,
   }
 
   let displayStyle = null
@@ -27,7 +28,12 @@ const Notification = ({ message, type }) => {
 const mapStateToProps = state => {
   return {
     message: state.notification.message,
-    type: state.notification.type
+    type: state.notification.type,
   }
+}
+
+Notification.propTypes = {
+  message: PropTypes.string,
+  type: PropTypes.string,
 }
 export default connect(mapStateToProps)(Notification)

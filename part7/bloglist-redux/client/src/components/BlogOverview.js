@@ -10,7 +10,7 @@ const BlogOverview = ({ blog }) => {
     // border: "solid",
     // borderWidth: 1,
     marginBottom: 5,
-    backgroundColor: "#F8F8F8"
+    backgroundColor: "#F8F8F8",
   }
 
   return (

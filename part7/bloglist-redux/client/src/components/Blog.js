@@ -1,64 +1,66 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { likeBlog, deleteBlog, addComment } from "../reducers/blogReducer";
-import { setNotification } from "../reducers/notificationReducer";
+import React, { useState } from "react"
+import { connect } from "react-redux"
+import { Link } from "react-router-dom"
+import PropTypes from "prop-types"
 
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+import { likeBlog, deleteBlog, addComment } from "../reducers/blogReducer"
+import { setNotification } from "../reducers/notificationReducer"
+
+import Container from "@material-ui/core/Container"
+import Typography from "@material-ui/core/Typography"
+import { makeStyles } from "@material-ui/core/styles"
+import Button from "@material-ui/core/Button"
 
 const useStyles = makeStyles(theme => ({
   button: {
-    margin: theme.spacing(1)
+    margin: theme.spacing(1),
   },
   input: {
-    display: "none"
-  }
-}));
+    display: "none",
+  },
+}))
 
 const Blog = props => {
-  const classes = useStyles();
-  const [formComment, setFormComment] = useState("");
+  const classes = useStyles()
+  const [formComment, setFormComment] = useState("")
 
-  const blog = props.blog;
+  const blog = props.blog
   if (blog === undefined || !blog) {
-    return null;
+    return null
   }
 
   const notify = (message, type) => {
-    props.setNotification({ message, type });
+    props.setNotification({ message, type })
     setTimeout(
       () => props.setNotification({ message: null, type: null }),
-      10000
-    );
-  };
+      10000,
+    )
+  }
 
   const deleteBlogFromList = blog => {
-    window.confirm(`Remove blog ${blog.title} by ${blog.author}?`);
+    window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)
     try {
-      props.deleteBlog(blog.id);
-      notify(`Blog ${blog.title} by ${blog.author} successfully removed!`);
+      props.deleteBlog(blog.id)
+      notify(`Blog ${blog.title} by ${blog.author} successfully removed!`)
     } catch (exception) {
-      notify(`Error encountered: ${exception}`);
+      notify(`Error encountered: ${exception}`)
     }
-  };
+  }
 
   const handleForm = event => {
-    setFormComment(event.target.value);
-  };
+    setFormComment(event.target.value)
+  }
 
   const newComment = async event => {
-    event.preventDefault();
+    event.preventDefault()
     try {
-      await props.addComment(props.blog, formComment);
-      notify(`Comment added!`);
-      setFormComment("");
+      await props.addComment(props.blog, formComment)
+      notify(`Comment added!`)
+      setFormComment("")
     } catch (exception) {
-      notify(`Error encountered: ${exception}`);
+      notify(`Error encountered: ${exception}`)
     }
-  };
+  }
 
   const details = () => (
     <Container fixed>
@@ -114,7 +116,7 @@ const Blog = props => {
         <div>{userCanDelete()}</div>
       </div>
     </Container>
-  );
+  )
 
   const userCanDelete = () => {
     if (blog.user && props.loggedId === blog.user.id) {
@@ -130,18 +132,18 @@ const Blog = props => {
             Delete
           </Button>
         </div>
-      );
+      )
     }
-  };
+  }
 
-  return <div>{details()}</div>;
-};
+  return <div>{details()}</div>
+}
 
 const mapStateToProps = state => {
   return {
-    loggedId: state.login.id //need to get this to compare if user is user
-  };
-};
+    loggedId: state.login.id, //need to get this to compare if user is user
+  }
+}
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -149,19 +151,18 @@ const mapDispatchToProps = dispatch => {
     addComment: (blog, comment) => dispatch(addComment(blog, comment)),
     deleteBlog: blogId => dispatch(deleteBlog(blogId)),
     setNotification: (message, type) => {
-      dispatch(setNotification(message, type));
-    }
-  };
-};
+      dispatch(setNotification(message, type))
+    },
+  }
+}
 
-// Blog.propTypes = {
-//   blog: PropTypes.object.isRequired,
-//   like: PropTypes.func.isRequired,
-//   remove: PropTypes.func.isRequired,
-//   loggedInUser: PropTypes.bool.isRequired
-// }
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  likeBlog: PropTypes.func.isRequired,
+  deleteBlog: PropTypes.func.isRequired,
+  addComment: PropTypes.func.isRequired,
+  setNotification: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+}
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Blog);
+export default connect(mapStateToProps, mapDispatchToProps)(Blog)

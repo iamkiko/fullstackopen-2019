@@ -1,15 +1,18 @@
 import React from "react"
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
+import PropTypes from "prop-types"
+
 import { logout } from "../reducers/loginReducer"
+
 import Typography from "@material-ui/core/Typography"
 import Button from "@material-ui/core/Button"
 import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles(theme => ({
   button: {
-    margin: theme.spacing(1)
-  }
+    margin: theme.spacing(1),
+  },
 }))
 
 const Navigation = props => {
@@ -17,7 +20,7 @@ const Navigation = props => {
 
   const navStyle = {
     backgroundColor: "#F8F8F8",
-    padding: ".5rem"
+    padding: ".5rem",
   }
 
   const handleLogout = () => {
@@ -52,17 +55,18 @@ const Navigation = props => {
 
 const mapStateToProps = state => {
   return {
-    currentUser: state.login
+    currentUser: state.login,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    logout: () => dispatch(logout())
+    logout: () => dispatch(logout()),
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Navigation)
+Navigation.propTypes = {
+  logout: PropTypes.func.isRequired,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navigation)
