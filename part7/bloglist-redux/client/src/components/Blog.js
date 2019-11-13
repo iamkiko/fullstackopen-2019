@@ -1,11 +1,13 @@
-import React, { useState } from "react"
-import { connect } from "react-redux"
-import { Link } from "react-router-dom"
-import { likeBlog, deleteBlog, addComment } from "../reducers/blogReducer"
-import { setNotification } from "../reducers/notificationReducer"
-import Typography from "@material-ui/core/Typography"
-import { makeStyles } from "@material-ui/core/styles"
-import Button from "@material-ui/core/Button"
+import React, { useState } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { likeBlog, deleteBlog, addComment } from "../reducers/blogReducer";
+import { setNotification } from "../reducers/notificationReducer";
+
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -14,102 +16,105 @@ const useStyles = makeStyles(theme => ({
   input: {
     display: "none"
   }
-}))
+}));
 
 const Blog = props => {
-  const classes = useStyles()
-  const [formComment, setFormComment] = useState("")
+  const classes = useStyles();
+  const [formComment, setFormComment] = useState("");
 
-  const blog = props.blog
+  const blog = props.blog;
   if (blog === undefined || !blog) {
-    return null
+    return null;
   }
 
   const notify = (message, type) => {
-    props.setNotification({ message, type })
+    props.setNotification({ message, type });
     setTimeout(
       () => props.setNotification({ message: null, type: null }),
       10000
-    )
-  }
+    );
+  };
 
   const deleteBlogFromList = blog => {
-    window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)
+    window.confirm(`Remove blog ${blog.title} by ${blog.author}?`);
     try {
-      props.deleteBlog(blog.id)
-      notify(`Blog ${blog.title} by ${blog.author} successfully removed!`)
+      props.deleteBlog(blog.id);
+      notify(`Blog ${blog.title} by ${blog.author} successfully removed!`);
     } catch (exception) {
-      notify(`Error encountered: ${exception}`)
+      notify(`Error encountered: ${exception}`);
     }
-  }
+  };
 
   const handleForm = event => {
-    setFormComment(event.target.value)
-  }
+    setFormComment(event.target.value);
+  };
 
   const newComment = async event => {
-    event.preventDefault()
+    event.preventDefault();
     try {
-      await props.addComment(props.blog, formComment)
-      notify(`Comment added!`)
-      setFormComment("")
+      await props.addComment(props.blog, formComment);
+      notify(`Comment added!`);
+      setFormComment("");
     } catch (exception) {
-      notify(`Error encountered: ${exception}`)
+      notify(`Error encountered: ${exception}`);
     }
-  }
+  };
 
   const details = () => (
-    <div className="title">
-      <Typography variant="h4" gutterBottom>
-        {blog.title} by {blog.author}{" "}
-      </Typography>
-      <div className="details">
-        <Typography gutterBottom>
-          <a href={blog.url}>{blog.url}</a>
-          <br />
-          {blog.likes} likes
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            size="small"
-            onClick={() => props.likeBlog(blog)}
-          >
-            like
-          </Button>
-          <div>
-            added by <Link to={`/users/${blog.user.id}`}>{blog.user.name}</Link>
-          </div>
+    <Container fixed>
+      <div className="title">
+        <Typography variant="h4" gutterBottom>
+          {blog.title} by {blog.author}{" "}
         </Typography>
+        <div className="details">
+          <Typography gutterBottom>
+            <a href={blog.url}>{blog.url}</a>
+            <br />
+            {blog.likes} likes
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              size="small"
+              onClick={() => props.likeBlog(blog)}
+            >
+              like
+            </Button>
+            <div>
+              added by{" "}
+              <Link to={`/users/${blog.user.id}`}>{blog.user.name}</Link>
+            </div>
+          </Typography>
+        </div>
+        <div>
+          {" "}
+          <Typography variant="h5" gutterBottom>
+            Comments
+          </Typography>
+          <form onSubmit={newComment}>
+            <input type="text" value={formComment} onChange={handleForm} />
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              size="small"
+              type="submit"
+            >
+              Add Comment
+            </Button>
+          </form>
+          <ul>
+            {blog.comments.map(comment => (
+              <li key={comment.id}>
+                <Typography>{comment.comment}</Typography>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>{userCanDelete()}</div>
       </div>
-      <div>
-        {" "}
-        <Typography variant="h5" gutterBottom>
-          Comments
-        </Typography>
-        <form onSubmit={newComment}>
-          <input type="text" value={formComment} onChange={handleForm} />
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            size="small"
-            type="submit"
-          >
-            Add Comment
-          </Button>
-        </form>
-        <ul>
-          {blog.comments.map(comment => (
-            <li key={comment.id}>
-              <Typography>{comment.comment}</Typography>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div>{userCanDelete()}</div>
-    </div>
-  )
+    </Container>
+  );
 
   const userCanDelete = () => {
     if (blog.user && props.loggedId === blog.user.id) {
@@ -125,18 +130,18 @@ const Blog = props => {
             Delete
           </Button>
         </div>
-      )
+      );
     }
-  }
+  };
 
-  return <div>{details()}</div>
-}
+  return <div>{details()}</div>;
+};
 
 const mapStateToProps = state => {
   return {
     loggedId: state.login.id //need to get this to compare if user is user
-  }
-}
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -144,10 +149,10 @@ const mapDispatchToProps = dispatch => {
     addComment: (blog, comment) => dispatch(addComment(blog, comment)),
     deleteBlog: blogId => dispatch(deleteBlog(blogId)),
     setNotification: (message, type) => {
-      dispatch(setNotification(message, type))
+      dispatch(setNotification(message, type));
     }
-  }
-}
+  };
+};
 
 // Blog.propTypes = {
 //   blog: PropTypes.object.isRequired,
@@ -159,4 +164,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Blog)
+)(Blog);
