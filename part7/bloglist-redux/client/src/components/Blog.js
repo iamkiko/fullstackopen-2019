@@ -94,13 +94,19 @@ const Blog = props => {
             Comments
           </Typography>
           <form onSubmit={newComment}>
-            <input type="text" value={formComment} onChange={handleForm} />
+            <input
+              id="comment"
+              type="text"
+              value={formComment}
+              onChange={handleForm}
+            />
             <Button
               variant="contained"
               color="primary"
               className={classes.button}
               size="small"
               type="submit"
+              data-cy="commentbutton"
             >
               Add Comment
             </Button>

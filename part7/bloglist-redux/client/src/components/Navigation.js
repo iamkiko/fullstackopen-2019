@@ -43,6 +43,7 @@ const Navigation = props => {
               className={classes.button}
               size="small"
               onClick={handleLogout}
+              data-cy="logout"
             >
               Log out
             </Button>

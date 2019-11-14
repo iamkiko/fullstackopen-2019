@@ -25,7 +25,9 @@
     "watch": "nodemon App.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "eslint": "eslint ."
+    "eslint": "eslint .",
+    "cypress:open": "cypress open",
+    "start:test": "cross-env NODE_ENV=test node index.js"
   },
   "browserslist": {
     "production": [
@@ -47,6 +49,7 @@
     "@testing-library/react": "^9.1.4",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.6",
+    "cypress": "^3.6.1",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-onepass": "^1.4.4",
     "eslint-config-prettier": "^6.5.0",
