@@ -28,15 +28,15 @@ const NewBlog = ({ author, title, url, addBlog, newBlogRef }) => {
         <Typography gutterBottom>
           <div>
             Title:
-            <input {...title} />
+            <input id="title" {...title} />
           </div>
           <div>
             Author:
-            <input {...author} />
+            <input id="author" {...author} />
           </div>
           <div>
             URL:
-            <input {...url} />
+            <input id="url" {...url} />
           </div>
           <Button
             variant="contained"
@@ -44,6 +44,7 @@ const NewBlog = ({ author, title, url, addBlog, newBlogRef }) => {
             size="small"
             className={classes.button}
             type="submit"
+            data-cy="createblog"
           >
             Create
           </Button>
