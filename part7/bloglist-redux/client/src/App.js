@@ -144,11 +144,11 @@ const App = props => {
         <Typography variant="subtitle1" gutterBottom>
           <div>
             Username
-            <input {...username} />
+            <input id="username" {...username} />
           </div>
           <div>
             Password
-            <input {...password} />
+            <input id="password" {...password} />
           </div>
           <Button
             variant="contained"
@@ -156,6 +156,7 @@ const App = props => {
             className={classes.button}
             size="small"
             type="submit"
+            data-cy="login"
           >
             Log me in!
           </Button>
