@@ -8,7 +8,7 @@ const notificationReducer = (state = null, action) => {
   }
   
   export const setNotification = (content, duration) => {
-    return dispatch => {
+    return dispatch=>{
       dispatch({
         type: 'SET_NOTIFICATION',
         data: content
