@@ -25,30 +25,34 @@ const NewBlog = ({ author, title, url, addBlog, newBlogRef }) => {
       </Typography>
 
       <form onSubmit={addBlog} ref={newBlogRef}>
-        <Typography gutterBottom>
-          <div>
+        <div>
+          <Typography gutterBottom>
             Title:
             <input id="title" {...title} reset={null} />
-          </div>
-          <div>
+          </Typography>
+        </div>
+        <div>
+          <Typography gutterBottom>
             Author:
             <input id="author" {...author} reset={null} />
-          </div>
-          <div>
+          </Typography>
+        </div>
+        <div>
+          <Typography gutterBottom>
             URL:
             <input id="url" {...url} reset={null} />
-          </div>
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            className={classes.button}
-            type="submit"
-            data-cy="createblog"
-          >
-            Create
-          </Button>
-        </Typography>
+          </Typography>
+        </div>
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          className={classes.button}
+          type="submit"
+          data-cy="createblog"
+        >
+          Create
+        </Button>
       </form>
     </div>
   )

@@ -82,11 +82,13 @@ const Blog = props => {
             >
               like
             </Button>
-            <div>
+          </Typography>
+          <div>
+            <Typography gutterBottom>
               added by{" "}
               <Link to={`/users/${blog.user.id}`}>{blog.user.name}</Link>
-            </div>
-          </Typography>
+            </Typography>
+          </div>
         </div>
         <div>
           {" "}
