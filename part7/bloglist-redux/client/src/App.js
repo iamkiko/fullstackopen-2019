@@ -144,11 +144,11 @@ const App = props => {
         <Typography variant="subtitle1" gutterBottom>
           <div>
             Username
-            <input id="username" {...username} />
+            <input id="username" {...username} reset={null} />
           </div>
           <div>
             Password
-            <input id="password" {...password} />
+            <input id="password" {...password} reset={null} />
           </div>
           <Button
             variant="contained"

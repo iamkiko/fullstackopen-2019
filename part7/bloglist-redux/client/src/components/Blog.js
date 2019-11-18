@@ -168,7 +168,6 @@ Blog.propTypes = {
   deleteBlog: PropTypes.func.isRequired,
   addComment: PropTypes.func.isRequired,
   setNotification: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Blog)

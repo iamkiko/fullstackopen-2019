@@ -28,15 +28,15 @@ const NewBlog = ({ author, title, url, addBlog, newBlogRef }) => {
         <Typography gutterBottom>
           <div>
             Title:
-            <input id="title" {...title} />
+            <input id="title" {...title} reset={null} />
           </div>
           <div>
             Author:
-            <input id="author" {...author} />
+            <input id="author" {...author} reset={null} />
           </div>
           <div>
             URL:
-            <input id="url" {...url} />
+            <input id="url" {...url} reset={null} />
           </div>
           <Button
             variant="contained"
@@ -55,7 +55,6 @@ const NewBlog = ({ author, title, url, addBlog, newBlogRef }) => {
 }
 
 NewBlog.propTypes = {
-  NewBlogRef: PropTypes.object.isRequired,
   addBlog: PropTypes.func.isRequired,
 }
 
